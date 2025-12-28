@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { AuthService } from '../services/auth.service';
 
 @Component({
@@ -22,7 +23,8 @@ import { AuthService } from '../services/auth.service';
     MatInputModule,
     MatButtonModule,
     MatCheckboxModule,
-    MatIconModule
+    MatIconModule,
+    MatSnackBarModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
@@ -34,6 +36,7 @@ export class LoginComponent implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
   private fb = inject(FormBuilder);
+  private snackBar = inject(MatSnackBar);
 
   ngOnInit() {
     this.loginForm = this.fb.group({
@@ -48,12 +51,10 @@ export class LoginComponent implements OnInit {
   }
 
   isLoading = false;
-  errorMessage = '';
 
   onLogin() {
     if (this.loginForm.valid) {
       this.isLoading = true;
-      this.errorMessage = '';
 
       const { email, password, rememberMe } = this.loginForm.value;
 
@@ -67,12 +68,12 @@ export class LoginComponent implements OnInit {
             // Navigate to home or dashboard
             this.router.navigate(['/']);
           } else {
-            this.errorMessage = response.message || 'Login failed. Please try again.';
+            this.showError(response.message || 'Login failed. Please try again.');
           }
         },
         error: (error) => {
           this.isLoading = false;
-          this.errorMessage = error.message || 'Login failed. Please check your credentials and try again.';
+          this.showError(error.message || 'Login failed. Please check your credentials and try again.');
         }
       });
     } else {
@@ -81,6 +82,15 @@ export class LoginComponent implements OnInit {
         this.loginForm.get(key)?.markAsTouched();
       });
     }
+  }
+
+  private showError(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 5000,
+      horizontalPosition: 'end',
+      verticalPosition: 'top',
+      panelClass: ['error-snackbar']
+    });
   }
 
   onGoogleLogin() {
