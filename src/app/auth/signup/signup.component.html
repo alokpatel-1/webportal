@@ -90,9 +90,16 @@
             </div>
           </div>
 
+          <!-- Error Message -->
+          <div *ngIf="errorMessage" class="error-message">
+            <mat-icon>error</mat-icon>
+            <span>{{ errorMessage }}</span>
+          </div>
+
           <!-- Create Account Button -->
-          <button mat-raised-button color="primary" type="submit" class="btn-primary" [disabled]="signupForm.invalid">
-            Create Account
+          <button mat-raised-button color="primary" type="submit" class="btn-primary" [disabled]="signupForm.invalid || isLoading">
+            <span *ngIf="!isLoading">Create Account</span>
+            <span *ngIf="isLoading">Creating Account...</span>
           </button>
         </form>
 

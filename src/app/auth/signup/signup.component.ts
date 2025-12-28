@@ -48,20 +48,34 @@ export class SignupComponent implements OnInit {
     this.showPassword = !this.showPassword;
   }
 
+  isLoading = false;
+  errorMessage = '';
+
   onSignup() {
     if (this.signupForm.valid) {
+      this.isLoading = true;
+      this.errorMessage = '';
+      
       const { fullName, email, password } = this.signupForm.value;
       
-      // Use auth service to signup
-      const success = this.authService.signup(fullName, email, password);
-      
-      if (success) {
-        // Navigate to home or dashboard
-        this.router.navigate(['/']);
-      } else {
-        // Handle signup error
-        console.error('Signup failed');
-      }
+      // Use auth service to register
+      this.authService.register(fullName, email, password).subscribe({
+        next: (response) => {
+          this.isLoading = false;
+          // Check for success and user data (from data.user or user)
+          const user = response.data?.user || response.user;
+          if (response.success && user) {
+            // Navigate to home or dashboard
+            this.router.navigate(['/']);
+          } else {
+            this.errorMessage = response.message || 'Signup failed. Please try again.';
+          }
+        },
+        error: (error) => {
+          this.isLoading = false;
+          this.errorMessage = error.message || 'Signup failed. Please check your information and try again.';
+        }
+      });
     } else {
       // Mark all fields as touched to show validation errors
       Object.keys(this.signupForm.controls).forEach(key => {

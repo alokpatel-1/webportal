@@ -43,8 +43,18 @@ export class NavbarComponent {
 
   onLogout(event: Event) {
     event.preventDefault();
-    this.authService.logout();
     this.showProfileDropdown = false;
+
+    // Call logout API and handle response
+    this.authService.logout().subscribe({
+      next: () => {
+        // Logout successful - state cleared and navigation handled in service
+      },
+      error: (error) => {
+        // Logout failed but state is still cleared in service
+        console.error('Logout error:', error);
+      }
+    });
   }
 }
 

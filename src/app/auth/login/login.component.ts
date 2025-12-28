@@ -14,9 +14,9 @@ import { AuthService } from '../services/auth.service';
   selector: 'app-login',
   standalone: true,
   imports: [
-    CommonModule, 
-    ReactiveFormsModule, 
-    RouterModule, 
+    CommonModule,
+    ReactiveFormsModule,
+    RouterModule,
     DecorativeElementsComponent,
     MatFormFieldModule,
     MatInputModule,
@@ -30,7 +30,7 @@ import { AuthService } from '../services/auth.service';
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   showPassword = false;
-  
+
   private authService = inject(AuthService);
   private router = inject(Router);
   private fb = inject(FormBuilder);
@@ -47,20 +47,34 @@ export class LoginComponent implements OnInit {
     this.showPassword = !this.showPassword;
   }
 
+  isLoading = false;
+  errorMessage = '';
+
   onLogin() {
     if (this.loginForm.valid) {
+      this.isLoading = true;
+      this.errorMessage = '';
+
       const { email, password, rememberMe } = this.loginForm.value;
-      
+
       // Use auth service to login
-      const success = this.authService.login(email, password, rememberMe);
-      
-      if (success) {
-        // Navigate to home or dashboard
-        this.router.navigate(['/']);
-      } else {
-        // Handle login error
-        console.error('Login failed');
-      }
+      this.authService.login(email, password, rememberMe).subscribe({
+        next: (response) => {
+          this.isLoading = false;
+          // Check for success and user data (from data.user or user)
+          const user = response.data?.user || response.user;
+          if (response.success && user) {
+            // Navigate to home or dashboard
+            this.router.navigate(['/']);
+          } else {
+            this.errorMessage = response.message || 'Login failed. Please try again.';
+          }
+        },
+        error: (error) => {
+          this.isLoading = false;
+          this.errorMessage = error.message || 'Login failed. Please check your credentials and try again.';
+        }
+      });
     } else {
       // Mark all fields as touched to show validation errors
       Object.keys(this.loginForm.controls).forEach(key => {

@@ -1,12 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { DecorativeElementsComponent } from '../decorative-elements/decorative-elements.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-change-password',
@@ -30,8 +31,12 @@ export class ChangePasswordComponent implements OnInit {
   showNewPassword = false;
   showConfirmPassword = false;
   passwordChanged = false;
+  isLoading = false;
+  errorMessage = '';
 
-  constructor(private fb: FormBuilder) {}
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private fb = inject(FormBuilder);
 
   ngOnInit() {
     this.changePasswordForm = this.fb.group({
@@ -69,9 +74,30 @@ export class ChangePasswordComponent implements OnInit {
 
   onSubmit() {
     if (this.changePasswordForm.valid) {
-      // Handle change password logic here
-      console.log('Change password', this.changePasswordForm.value);
-      this.passwordChanged = true;
+      this.isLoading = true;
+      this.errorMessage = '';
+      this.passwordChanged = false;
+      
+      const { currentPassword, newPassword } = this.changePasswordForm.value;
+      
+      this.authService.changePassword(currentPassword, newPassword).subscribe({
+        next: (response) => {
+          this.isLoading = false;
+          if (response.success || response.message) {
+            this.passwordChanged = true;
+            // Optionally redirect after a delay
+            setTimeout(() => {
+              this.router.navigate(['/']);
+            }, 2000);
+          } else {
+            this.errorMessage = response.message || 'Password change failed. Please try again.';
+          }
+        },
+        error: (error) => {
+          this.isLoading = false;
+          this.errorMessage = error.message || 'Password change failed. Please check your current password and try again.';
+        }
+      });
     } else {
       Object.keys(this.changePasswordForm.controls).forEach(key => {
         this.changePasswordForm.get(key)?.markAsTouched();

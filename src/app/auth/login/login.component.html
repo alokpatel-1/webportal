@@ -41,9 +41,16 @@
           <a routerLink="/auth/forget-password" class="forgot-password">Forgot password?</a>
         </div>
 
+        <!-- Error Message -->
+        <div *ngIf="errorMessage" class="error-message">
+          <mat-icon>error</mat-icon>
+          <span>{{ errorMessage }}</span>
+        </div>
+
         <!-- Sign In Button -->
-        <button mat-raised-button color="primary" type="submit" class="btn-primary" [disabled]="loginForm.invalid">
-          Sign In
+        <button mat-raised-button color="primary" type="submit" class="btn-primary" [disabled]="loginForm.invalid || isLoading">
+          <span *ngIf="!isLoading">Sign In</span>
+          <span *ngIf="isLoading">Signing In...</span>
         </button>
       </form>
 
