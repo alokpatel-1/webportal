@@ -78,6 +78,24 @@
   &::placeholder {
     color: var(--color-text-muted);
   }
+  
+  &.error {
+    border-color: var(--color-error);
+    
+    &:focus {
+      border-color: var(--color-error);
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+    }
+  }
+}
+
+.error-message {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--color-error);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
 }
 
 .password-input-wrapper {
@@ -156,14 +174,20 @@
   transition: all var(--transition-base);
   animation: fadeIn 0.8s ease-out;
   
-  &:hover {
+  &:hover:not(:disabled) {
     background: #1E40AF;
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
   }
   
-  &:active {
+  &:active:not(:disabled) {
     transform: translateY(0);
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
   }
 }
 

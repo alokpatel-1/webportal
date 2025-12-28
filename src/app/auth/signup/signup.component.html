@@ -43,40 +43,57 @@
         <h1 class="signup-title">Create Account</h1>
         <p class="signup-subtitle">Fill in your details to get started</p>
 
-        <form (ngSubmit)="onSignup()" class="signup-form">
+        <form [formGroup]="signupForm" (ngSubmit)="onSignup()" class="signup-form">
           <!-- Full Name Field -->
           <div class="form-group">
             <label for="fullName" class="form-label">Full Name</label>
-            <input autocomplete="new-user" type="text" id="fullName" [(ngModel)]="fullName" name="fullName" placeholder="Enter your full name" class="form-input" required />
+            <input autocomplete="name" type="text" id="fullName" formControlName="fullName" placeholder="Enter your full name" class="form-input" [class.error]="fullName?.invalid && fullName?.touched" />
+            <div *ngIf="fullName?.invalid && fullName?.touched" class="error-message">
+              <span *ngIf="fullName?.errors?.['required']">Full name is required</span>
+              <span *ngIf="fullName?.errors?.['minlength']">Full name must be at least 2 characters</span>
+            </div>
           </div>
 
           <!-- Email Field -->
           <div class="form-group">
             <label for="email" class="form-label">Email Address</label>
-            <input autocomplete="new-user" type="email" id="email" [(ngModel)]="email" name="email" placeholder="Enter your email" class="form-input" required />
+            <input autocomplete="email" type="email" id="email" formControlName="email" placeholder="Enter your email" class="form-input" [class.error]="email?.invalid && email?.touched" />
+            <div *ngIf="email?.invalid && email?.touched" class="error-message">
+              <span *ngIf="email?.errors?.['required']">Email is required</span>
+              <span *ngIf="email?.errors?.['email']">Please enter a valid email</span>
+            </div>
           </div>
 
           <!-- Password Field -->
           <div class="form-group">
             <label for="password" class="form-label">Password</label>
             <div class="password-input-wrapper">
-              <input autocomplete="new-user" [type]="showPassword ? 'text' : 'password'" id="password" [(ngModel)]="password" name="password" placeholder="Create a strong password" class="form-input" required />
+              <input autocomplete="new-password" [type]="showPassword ? 'text' : 'password'" id="password" formControlName="password" placeholder="Create a strong password" class="form-input" [class.error]="password?.invalid && password?.touched" />
               <button type="button" (click)="togglePasswordVisibility()" class="password-toggle">
                 {{ showPassword ? 'Hide' : 'Show' }}
               </button>
             </div>
+            <div *ngIf="password?.invalid && password?.touched" class="error-message">
+              <span *ngIf="password?.errors?.['required']">Password is required</span>
+              <span *ngIf="password?.errors?.['minlength']">Password must be at least 6 characters</span>
+            </div>
           </div>
 
           <!-- Terms & Conditions -->
-          <label class="checkbox-label">
-            <input type="checkbox" [(ngModel)]="agreeToTerms" name="agreeToTerms" class="checkbox-input" required />
-            <span class="checkbox-text">
-              I agree to the <a href="#" class="terms-link">Terms & Conditions</a>
-            </span>
-          </label>
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input type="checkbox" formControlName="agreeToTerms" class="checkbox-input" />
+              <span class="checkbox-text">
+                I agree to the <a href="#" class="terms-link">Terms & Conditions</a>
+              </span>
+            </label>
+            <div *ngIf="agreeToTerms?.invalid && agreeToTerms?.touched" class="error-message">
+              <span>You must agree to the Terms & Conditions</span>
+            </div>
+          </div>
 
           <!-- Create Account Button -->
-          <button type="submit" class="btn-primary">Create Account</button>
+          <button type="submit" class="btn-primary" [disabled]="signupForm.invalid">Create Account</button>
         </form>
 
         <!-- Divider -->
