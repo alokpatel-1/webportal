@@ -1,32 +1,133 @@
-.login-page {
+.signup-page {
   min-height: 100vh;
   background: var(--color-bg-main);
   position: relative;
   overflow: hidden;
   padding: 2rem 1rem;
+}
+
+// Signup Container
+.signup-container {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  min-height: calc(100vh - 4rem);
+  align-items: center;
+  animation: fadeIn 0.6s ease-out;
+}
+
+.signup-left {
+  background: #1E3A8A;
+  background-image: 
+    repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255, 255, 255, 0.05) 10px, rgba(255, 255, 255, 0.05) 20px);
+  border-radius: var(--radius-xl);
+  padding: 3rem;
+  color: var(--color-text-white);
+  display: flex;
+  align-items: center;
+  animation: slideInLeft 0.6s ease-out;
+  box-shadow: var(--shadow-xl);
+  position: relative;
+  overflow: hidden;
+  
+  .shopping-hero-img {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: auto;
+    height: 60%;
+    opacity: 0.15;
+    object-fit: contain;
+    object-position: bottom right;
+    pointer-events: none;
+    animation: floatSlow 8s ease-in-out infinite;
+  }
+}
+
+.benefits-content {
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.benefits-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.benefits-subtitle {
+  font-size: 1rem;
+  opacity: 0.9;
+  margin-bottom: 2.5rem;
+  line-height: 1.6;
+}
+
+.benefits-box {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.benefits-header {
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 1.5rem;
+  opacity: 0.9;
+}
+
+.benefits-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.benefit-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1rem;
+  animation: fadeIn 0.8s ease-out;
+  
+  &:nth-child(1) { animation-delay: 0.1s; }
+  &:nth-child(2) { animation-delay: 0.2s; }
+  &:nth-child(3) { animation-delay: 0.3s; }
+  &:nth-child(4) { animation-delay: 0.4s; }
+  
+  .check-icon {
+    width: 24px;
+    height: 24px;
+    color: var(--color-text-white);
+    flex-shrink: 0;
+  }
+}
+
+.signup-right {
   display: flex;
   align-items: center;
   justify-content: center;
+  animation: slideInRight 0.6s ease-out;
 }
 
-// Login Container
-.login-container {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  max-width: 480px;
-  animation: scaleIn 0.5s ease-out;
-}
-
-.login-card {
+.signup-card {
   background: var(--color-bg-card);
   border-radius: var(--radius-xl);
   padding: 3rem;
   box-shadow: var(--shadow-xl);
-  animation: fadeIn 0.6s ease-out;
+  width: 100%;
+  max-width: 480px;
 }
 
-.login-title {
+.signup-title {
   font-size: 2rem;
   font-weight: 700;
   color: var(--color-text-primary);
@@ -34,14 +135,14 @@
   text-align: center;
 }
 
-.login-subtitle {
+.signup-subtitle {
   font-size: 0.875rem;
   color: var(--color-text-secondary);
   text-align: center;
   margin-bottom: 2rem;
 }
 
-.login-form {
+.signup-form {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -107,18 +208,12 @@
   }
 }
 
-.form-options {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.875rem;
-}
-
 .checkbox-label {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   cursor: pointer;
+  font-size: 0.875rem;
   
   .checkbox-input {
     width: 16px;
@@ -129,17 +224,17 @@
   
   .checkbox-text {
     color: var(--color-text-secondary);
-  }
-}
-
-.forgot-password {
-  color: var(--color-primary);
-  text-decoration: none;
-  font-weight: 500;
-  transition: color var(--transition-base);
-  
-  &:hover {
-    color: var(--color-primary-dark);
+    
+    .terms-link {
+      color: var(--color-primary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color var(--transition-base);
+      
+      &:hover {
+        color: var(--color-primary-dark);
+      }
+    }
   }
 }
 
@@ -154,7 +249,6 @@
   font-weight: 600;
   cursor: pointer;
   transition: all var(--transition-base);
-  animation: fadeIn 0.8s ease-out;
   
   &:hover {
     background: #1E40AF;
@@ -216,26 +310,7 @@
   }
 }
 
-.secure-indicator {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  margin-top: 1rem;
-  padding: 0.5rem;
-  background: rgba(16, 185, 129, 0.1);
-  border-radius: var(--radius-md);
-  font-size: 0.75rem;
-  color: var(--color-secondary);
-  
-  .secure-icon {
-    width: 16px;
-    height: 16px;
-    color: var(--color-secondary);
-  }
-}
-
-.signup-link {
+.signin-link {
   text-align: center;
   margin-top: 1.5rem;
   font-size: 0.875rem;
@@ -254,14 +329,42 @@
   }
 }
 
+@media (max-width: 968px) {
+  .signup-container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .signup-left {
+    order: 2;
+    padding: 2rem;
+  }
+  
+  .signup-right {
+    order: 1;
+  }
+  
+  .benefits-title {
+    font-size: 2rem;
+  }
+}
+
 @media (max-width: 640px) {
-  .login-card {
+  .signup-card {
     padding: 2rem 1.5rem;
   }
   
-  .login-title {
+  .signup-title {
     font-size: 1.75rem;
   }
   
+  .benefits-box {
+    padding: 1.5rem;
+  }
+  
+  .signup-left .shopping-hero-img {
+    height: 40%;
+    opacity: 0.1;
+  }
 }
 

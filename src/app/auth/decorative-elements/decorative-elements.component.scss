@@ -1,0 +1,194 @@
+// Decorative Elements
+.decorative-elements {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+// Top Left Elements
+.circle-top-left {
+  position: absolute;
+  top: 7%;
+  left: 11%;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--color-text-muted);
+  background: transparent;
+  opacity: 0.5;
+  animation: pulse 3s ease-in-out infinite;
+}
+
+.wavy-top-left {
+  position: absolute;
+  top: 20.5%;
+  left: 3%;
+  width: auto;
+  height: 100px;
+  opacity: 0.7;
+  animation: floatSlow 4s ease-in-out infinite;
+  object-fit: contain;
+}
+
+.rectangle-top-left {
+  position: absolute;
+  top: 10%;
+  left: 2%;
+  width: 100px;
+  height: 100px;
+  border: 2px solid var(--color-text-primary);
+  border-radius: 4px;
+  opacity: 0.25;
+  transform: rotate(-8deg);
+  animation: floatSlow 5s ease-in-out infinite;
+  background: transparent;
+}
+
+// Top Right Elements
+.wavy-top-right {
+  position: absolute;
+  top: 8%;
+  right: 5%;
+  width: auto;
+  height: 100px;
+  opacity: 0.7;
+  animation: floatSlow 4s ease-in-out infinite 1s;
+  object-fit: contain;
+}
+
+.rectangle-top-right {
+  position: absolute;
+  top: 18.5%;
+  right: 3%;
+  width: 100px;
+  height: 100px;
+  border: 2px solid var(--color-text-primary);
+  border-radius: 4px;
+  opacity: 0.25;
+  transform: rotate(8deg);
+  animation: floatSlow 5s ease-in-out infinite 1s;
+  background: transparent;
+}
+
+// Bottom Left Elements
+.dotted-orange-bottom-left {
+  position: absolute;
+  bottom: 20%;
+  left: 4%;
+  width: auto;
+  height: 140px;
+  object-fit: contain;
+  filter: hue-rotate(0deg) saturate(1.2);
+  opacity: 0.9;
+  animation: floatSlow 4s ease-in-out infinite 2s;
+}
+
+.dotted-gray-bottom-left {
+  position: absolute;
+  bottom: 10%;
+  left: 4%;
+  width: auto;
+  height: 140px;
+  object-fit: contain;
+  filter: grayscale(0.8) brightness(0.9);
+  opacity: 0.6;
+  animation: floatSlow 4s ease-in-out infinite 2.5s;
+}
+
+.circle-bottom-left {
+  position: absolute;
+  bottom: 38%;
+  left: 4%;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--color-text-muted);
+  background: transparent;
+  opacity: 0.5;
+  animation: pulse 3s ease-in-out infinite 2s;
+}
+
+// Bottom Right Elements
+.dotted-orange-bottom-right {
+  position: absolute;
+  bottom: 12%;
+  right: 0%;
+  width: auto;
+  height: 140px;
+  object-fit: contain;
+  filter: hue-rotate(0deg) saturate(1.2);
+  opacity: 0.85;
+  z-index: 0;
+  animation: floatSlow 4s ease-in-out infinite 1.5s;
+}
+
+.person-sitting-img {
+  position: absolute;
+  bottom: 14%;
+  right: 4%;
+  width: auto;
+  height: 200px;
+  max-width: 250px;
+  object-fit: contain;
+  animation: floatSlow 5s ease-in-out infinite 1.5s;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+  z-index: 2;
+}
+
+// Form Top Circle
+.circle-form-top {
+  position: absolute;
+  top: 22%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--color-text-muted);
+  opacity: 0.5;
+  animation: pulse 3s ease-in-out infinite 0.5s;
+}
+
+// Responsive Styles
+@media (max-width: 640px) {
+
+  .circle-top-left,
+  .circle-bottom-left,
+  .circle-form-top {
+    width: 10px;
+    height: 10px;
+  }
+
+  .wavy-top-left,
+  .wavy-top-right {
+    height: 35px;
+    opacity: 0.5;
+  }
+
+  .rectangle-top-left,
+  .rectangle-top-right {
+    width: 35px;
+    height: 28px;
+  }
+
+  .dotted-orange-bottom-left,
+  .dotted-gray-bottom-left {
+    height: 50px;
+    opacity: 0.7;
+  }
+
+  .dotted-orange-bottom-right {
+    height: 100px;
+    bottom: 10%;
+  }
+
+  .person-sitting-img {
+    height: 140px;
+    max-width: 160px;
+    bottom: 6%;
+  }
+}

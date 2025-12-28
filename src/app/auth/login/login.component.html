@@ -1,38 +1,66 @@
-<div class="login-container">
-  <div class="login-card">
-    <h2>Login</h2>
+<div class="login-page">
+  <!-- Decorative Elements -->
+  <app-decorative-elements [showFormTopCircle]="true"></app-decorative-elements>
 
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input id="email" type="email" formControlName="email" class="form-control" [class.invalid]="email?.invalid && email?.touched" placeholder="Enter your email" />
-        <div class="error-message" *ngIf="email?.invalid && email?.touched">
-          <span *ngIf="email?.errors?.['required']">Email is required</span>
-          <span *ngIf="email?.errors?.['email']">Please enter a valid email</span>
+  <!-- Login Card -->
+  <div class="login-container">
+    <div class="login-card">
+      <h1 class="login-title">Welcome Back!</h1>
+      <p class="login-subtitle">Sign in to continue shopping and track your orders</p>
+
+      <form (ngSubmit)="onLogin()" class="login-form">
+        <!-- Email Field -->
+        <div class="form-group">
+          <label for="email" class="form-label">Email Address</label>
+          <input autocomplete="new-user" type="email" id="email" [(ngModel)]="email" name="email" placeholder="Enter your email" class="form-input" required />
         </div>
-      </div>
 
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input id="password" type="password" formControlName="password" class="form-control" [class.invalid]="password?.invalid && password?.touched" placeholder="Enter your password" />
-        <div class="error-message" *ngIf="password?.invalid && password?.touched">
-          <span *ngIf="password?.errors?.['required']">Password is required</span>
-          <span *ngIf="password?.errors?.['minlength']">Password must be at least 6 characters</span>
+        <!-- Password Field -->
+        <div class="form-group">
+          <label for="password" class="form-label">Password</label>
+          <div class="password-input-wrapper">
+            <input autocomplete="new-user" [type]="showPassword ? 'text' : 'password'" id="password" [(ngModel)]="password" name="password" placeholder="Enter your password" class="form-input" required />
+            <button type="button" (click)="togglePasswordVisibility()" class="password-toggle">
+              {{ showPassword ? 'Hide' : 'Show' }}
+            </button>
+          </div>
         </div>
+
+        <!-- Remember Me & Forgot Password -->
+        <div class="form-options">
+          <label class="checkbox-label">
+            <input type="checkbox" [(ngModel)]="rememberMe" name="rememberMe" class="checkbox-input" />
+            <span class="checkbox-text">Remember me</span>
+          </label>
+          <a href="#" class="forgot-password">Forgot password?</a>
+        </div>
+
+        <!-- Sign In Button -->
+        <button type="submit" class="btn-primary">Sign In</button>
+      </form>
+
+      <!-- Divider -->
+      <div class="divider">
+        <span class="divider-text">Or continue with</span>
       </div>
 
-      <div class="error-message" *ngIf="errorMessage">
-        {{ errorMessage }}
-      </div>
-
-      <button type="submit" class="btn btn-primary" [disabled]="isLoading || loginForm.invalid">
-        <span *ngIf="!isLoading">Login</span>
-        <span *ngIf="isLoading">Logging in...</span>
+      <!-- Google Login -->
+      <button type="button" (click)="onGoogleLogin()" class="btn-google">
+        <img src="assets/svg/google.svg" alt="Google" class="google-icon">
+        <span>Continue with Google</span>
       </button>
-    </form>
 
-    <div class="auth-link">
-      <p>Don't have an account? <a routerLink="/auth/register">Register here</a></p>
+      <!-- Secure Connection -->
+      <div class="secure-indicator">
+        <img src="assets/svg/secure.svg" alt="Secure" class="secure-icon">
+        <span>Secure & encrypted connection</span>
+      </div>
+
+      <!-- Sign Up Link -->
+      <div class="signup-link">
+        <span>New to ShopHub?</span>
+        <a routerLink="/auth/signup" class="link">Create an account</a>
+      </div>
     </div>
   </div>
 </div>

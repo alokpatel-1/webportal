@@ -5,16 +5,17 @@ import { RouterModule } from '@angular/router';
 import { DecorativeElementsComponent } from '../decorative-elements/decorative-elements.component';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-signup',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule, DecorativeElementsComponent],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  templateUrl: './signup.component.html',
+  styleUrl: './signup.component.scss'
 })
-export class LoginComponent {
+export class SignupComponent {
   showPassword = false;
-  rememberMe = false;
+  agreeToTerms = false;
   
+  fullName = '';
   email = '';
   password = '';
 
@@ -22,14 +23,18 @@ export class LoginComponent {
     this.showPassword = !this.showPassword;
   }
 
-  onLogin() {
-    // Handle login logic here
-    console.log('Login attempt', { email: this.email, password: this.password });
+  onSignup() {
+    // Handle signup logic here
+    console.log('Signup attempt', { 
+      fullName: this.fullName, 
+      email: this.email, 
+      password: this.password 
+    });
   }
 
-  onGoogleLogin() {
-    // Handle Google login logic here
-    console.log('Google login');
+  onGoogleSignup() {
+    // Handle Google signup logic here
+    console.log('Google signup');
   }
 }
 

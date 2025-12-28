@@ -1,0 +1,44 @@
+<nav class="navbar">
+  <div class="navbar-container">
+    <!-- Logo -->
+    <div class="navbar-logo">
+      <img src="assets/svg/shopping-cart.svg" alt="ShopHub" class="logo-icon">
+    </div>
+
+    <!-- Navigation Links -->
+    <div class="navbar-links">
+      <a href="#" class="nav-link">MEN</a>
+      <a href="#" class="nav-link">WOMEN</a>
+      <a href="#" class="nav-link">KIDS</a>
+      <a href="#" class="nav-link">HOME & LIVING</a>
+      <a href="#" class="nav-link">BEAUTY</a>
+      <a href="#" class="nav-link">
+        STUDIO
+        <span class="new-badge">NEW</span>
+      </a>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="navbar-search">
+      <img src="assets/svg/search.svg" alt="Search" class="search-icon">
+      <input type="text" placeholder="Search for products, brands and more" class="search-input">
+    </div>
+
+    <!-- User Actions -->
+    <div class="navbar-actions">
+      <a href="#" class="action-item">
+        <img src="assets/svg/profile.svg" alt="Profile" class="action-icon">
+        <span class="action-label">Profile</span>
+      </a>
+      <a href="#" class="action-item">
+        <img src="assets/svg/wishlist.svg" alt="Wishlist" class="action-icon">
+        <span class="action-label">Wishlist</span>
+      </a>
+      <a href="#" class="action-item bag-item">
+        <img src="assets/svg/bag.svg" alt="Bag" class="action-icon">
+        <span class="action-label">Bag</span>
+        <span class="bag-badge" *ngIf="bagItemCount > 0">{{ bagItemCount }}</span>
+      </a>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,101 @@
+<div class="signup-page">
+  <!-- Decorative Elements -->
+  <app-decorative-elements></app-decorative-elements>
+
+  <!-- Signup Container -->
+  <div class="signup-container">
+    <!-- Left Section - Benefits -->
+    <div class="signup-left">
+      <img src="assets/svg/shopping-hero.png" alt="Shopping hero" class="shopping-hero-img">
+      <div class="benefits-content">
+        <h1 class="benefits-title">Join ShopHub Today</h1>
+        <p class="benefits-subtitle">
+          Create your account and unlock a world of amazing shopping experiences with exclusive benefits.
+        </p>
+
+        <div class="benefits-box">
+          <div class="benefits-header">MEMBER BENEFITS</div>
+          <div class="benefits-list">
+            <div class="benefit-item">
+              <img src="assets/svg/checkmark.svg" alt="Check" class="check-icon">
+              <span>Track your orders in real-time</span>
+            </div>
+            <div class="benefit-item">
+              <img src="assets/svg/checkmark.svg" alt="Check" class="check-icon">
+              <span>Save items to your wishlist</span>
+            </div>
+            <div class="benefit-item">
+              <img src="assets/svg/checkmark.svg" alt="Check" class="check-icon">
+              <span>Faster checkout experience</span>
+            </div>
+            <div class="benefit-item">
+              <img src="assets/svg/checkmark.svg" alt="Check" class="check-icon">
+              <span>Exclusive deals and offers</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Section - Form -->
+    <div class="signup-right">
+      <div class="signup-card">
+        <h1 class="signup-title">Create Account</h1>
+        <p class="signup-subtitle">Fill in your details to get started</p>
+
+        <form (ngSubmit)="onSignup()" class="signup-form">
+          <!-- Full Name Field -->
+          <div class="form-group">
+            <label for="fullName" class="form-label">Full Name</label>
+            <input autocomplete="new-user" type="text" id="fullName" [(ngModel)]="fullName" name="fullName" placeholder="Enter your full name" class="form-input" required />
+          </div>
+
+          <!-- Email Field -->
+          <div class="form-group">
+            <label for="email" class="form-label">Email Address</label>
+            <input autocomplete="new-user" type="email" id="email" [(ngModel)]="email" name="email" placeholder="Enter your email" class="form-input" required />
+          </div>
+
+          <!-- Password Field -->
+          <div class="form-group">
+            <label for="password" class="form-label">Password</label>
+            <div class="password-input-wrapper">
+              <input autocomplete="new-user" [type]="showPassword ? 'text' : 'password'" id="password" [(ngModel)]="password" name="password" placeholder="Create a strong password" class="form-input" required />
+              <button type="button" (click)="togglePasswordVisibility()" class="password-toggle">
+                {{ showPassword ? 'Hide' : 'Show' }}
+              </button>
+            </div>
+          </div>
+
+          <!-- Terms & Conditions -->
+          <label class="checkbox-label">
+            <input type="checkbox" [(ngModel)]="agreeToTerms" name="agreeToTerms" class="checkbox-input" required />
+            <span class="checkbox-text">
+              I agree to the <a href="#" class="terms-link">Terms & Conditions</a>
+            </span>
+          </label>
+
+          <!-- Create Account Button -->
+          <button type="submit" class="btn-primary">Create Account</button>
+        </form>
+
+        <!-- Divider -->
+        <div class="divider">
+          <span class="divider-text">Or sign up with</span>
+        </div>
+
+        <!-- Google Signup -->
+        <button type="button" (click)="onGoogleSignup()" class="btn-google">
+          <img src="assets/svg/google.svg" alt="Google" class="google-icon">
+          <span>Sign up with Google</span>
+        </button>
+
+        <!-- Sign In Link -->
+        <div class="signin-link">
+          <span>Already have an account?</span>
+          <a routerLink="/auth/login" class="link">Sign in</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
