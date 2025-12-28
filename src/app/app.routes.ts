@@ -7,6 +7,10 @@ export const routes: Routes = [
     children: authRoutes
   },
   {
+    path: 'dashboard',
+    loadComponent: () => import('./product/dashboard/dashboard.component').then(m => m.DashboardComponent)
+  },
+  {
     path: '',
     redirectTo: '/auth/login',
     pathMatch: 'full'

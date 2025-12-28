@@ -1,0 +1,56 @@
+<div class="dashboard-page">
+  <div class="dashboard-container">
+    <div class="dashboard-header">
+      <h1 class="dashboard-title">Welcome to Dashboard</h1>
+      <p class="dashboard-subtitle" *ngIf="userName()">
+        Hello, {{ userName() }}! 👋
+      </p>
+    </div>
+
+    <div class="dashboard-content">
+      <div class="dashboard-card">
+        <h2 class="card-title">Your Account</h2>
+        <div class="user-info" *ngIf="user()">
+          <div class="info-item">
+            <span class="info-label">Name:</span>
+            <span class="info-value">{{ user()?.name }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Email:</span>
+            <span class="info-value">{{ user()?.email }}</span>
+          </div>
+          <div class="info-item" *ngIf="user()?.role">
+            <span class="info-label">Role:</span>
+            <span class="info-value">{{ user()?.role?.join(', ') }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-card">
+        <h2 class="card-title">Quick Actions</h2>
+        <div class="actions-grid">
+          <a routerLink="/products" class="action-card">
+            <div class="action-icon">🛍️</div>
+            <div class="action-title">Browse Products</div>
+            <div class="action-description">Explore our product catalog</div>
+          </a>
+          <a routerLink="/orders" class="action-card">
+            <div class="action-icon">📦</div>
+            <div class="action-title">My Orders</div>
+            <div class="action-description">View your order history</div>
+          </a>
+          <a routerLink="/wishlist" class="action-card">
+            <div class="action-icon">❤️</div>
+            <div class="action-title">Wishlist</div>
+            <div class="action-description">Your saved items</div>
+          </a>
+          <a routerLink="/profile" class="action-card">
+            <div class="action-icon">👤</div>
+            <div class="action-title">Profile</div>
+            <div class="action-description">Manage your account</div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

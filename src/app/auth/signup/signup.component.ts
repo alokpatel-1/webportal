@@ -65,8 +65,8 @@ export class SignupComponent implements OnInit {
           // Check for success and user data (from data.user or user)
           const user = response.data?.user || response.user;
           if (response.success && user) {
-            // Navigate to home or dashboard
-            this.router.navigate(['/']);
+            // Navigate to dashboard
+            this.router.navigate(['/dashboard']);
           } else {
             this.errorMessage = response.message || 'Signup failed. Please try again.';
           }

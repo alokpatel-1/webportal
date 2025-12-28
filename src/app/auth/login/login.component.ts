@@ -32,6 +32,7 @@ import { AuthService } from '../services/auth.service';
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   showPassword = false;
+  isLoading = false;
 
   private authService = inject(AuthService);
   private router = inject(Router);
@@ -50,8 +51,6 @@ export class LoginComponent implements OnInit {
     this.showPassword = !this.showPassword;
   }
 
-  isLoading = false;
-
   onLogin() {
     if (this.loginForm.valid) {
       this.isLoading = true;
@@ -65,8 +64,8 @@ export class LoginComponent implements OnInit {
           // Check for success and user data (from data.user or user)
           const user = response.data?.user || response.user;
           if (response.success && user) {
-            // Navigate to home or dashboard
-            this.router.navigate(['/']);
+            // Navigate to dashboard
+            this.router.navigate(['/dashboard']);
           } else {
             this.showError(response.message || 'Login failed. Please try again.');
           }

@@ -66,9 +66,7 @@ export class AuthService {
   readonly userPhone = computed(() => this._user()?.phone || '');
 
   constructor() {
-    // Check for stored user data on service initialization
-    this.loadUserFromStorage();
-    // Verify session on initialization
+    // Verify session on initialization (loads from localStorage first, then verifies with backend)
     this.verifySession();
   }
 
@@ -108,10 +106,8 @@ export class AuthService {
         const user = response.data?.user || response.user;
         if (user) {
           this._user.set(user);
-
-          if (rememberMe) {
-            localStorage.setItem('user', JSON.stringify(user));
-          }
+          // Always save to localStorage to persist across page refreshes
+          localStorage.setItem('user', JSON.stringify(user));
         }
       }),
       catchError(this.handleError)
@@ -133,11 +129,44 @@ export class AuthService {
 
   /**
    * Verify session by checking if user is still authenticated
+   * Calls backend to verify cookies (refreshToken, accessToken)
    */
   private verifySession(): void {
-    // Optionally, you can add an endpoint to verify the session
-    // For now, we'll just load from localStorage
-    // If you have a /api/auth/verify endpoint, use it here
+    // First, try to load from localStorage for immediate UI update
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      try {
+        const user = JSON.parse(storedUser);
+        this._user.set(user);
+      } catch (error) {
+        console.error('Error loading user from storage:', error);
+        localStorage.removeItem('user');
+      }
+    }
+
+    // Then verify with backend using cookies
+    // Try common endpoints: /me, /verify, /profile, or /current-user
+    this.http.get<AuthResponse>(`${this.apiUrl}/me`, {
+      withCredentials: true
+    }).subscribe({
+      next: (response) => {
+        const user = response.data?.user || response.user;
+        if (user) {
+          this._user.set(user);
+          localStorage.setItem('user', JSON.stringify(user));
+        }
+      },
+      error: (error) => {
+        // Session invalid or endpoint doesn't exist
+        // Clear user data if session is invalid
+        if (error.status === 401 || error.status === 403) {
+          this._user.set(null);
+          localStorage.removeItem('user');
+        }
+        // If endpoint doesn't exist (404), keep localStorage user
+        // This allows the app to work even if /me endpoint is not implemented
+      }
+    });
   }
 
   /**
