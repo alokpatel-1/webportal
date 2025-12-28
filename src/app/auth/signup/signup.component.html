@@ -45,55 +45,55 @@
 
         <form [formGroup]="signupForm" (ngSubmit)="onSignup()" class="signup-form">
           <!-- Full Name Field -->
-          <div class="form-group">
-            <label for="fullName" class="form-label">Full Name</label>
-            <input autocomplete="name" type="text" id="fullName" formControlName="fullName" placeholder="Enter your full name" class="form-input" [class.error]="fullName?.invalid && fullName?.touched" />
-            <div *ngIf="fullName?.invalid && fullName?.touched" class="error-message">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Full Name</mat-label>
+            <input matInput type="text" formControlName="fullName" autocomplete="name" placeholder="Enter your full name" />
+            <mat-icon matPrefix>person</mat-icon>
+            <mat-error *ngIf="fullName?.invalid && fullName?.touched">
               <span *ngIf="fullName?.errors?.['required']">Full name is required</span>
               <span *ngIf="fullName?.errors?.['minlength']">Full name must be at least 2 characters</span>
-            </div>
-          </div>
+            </mat-error>
+          </mat-form-field>
 
           <!-- Email Field -->
-          <div class="form-group">
-            <label for="email" class="form-label">Email Address</label>
-            <input autocomplete="email" type="email" id="email" formControlName="email" placeholder="Enter your email" class="form-input" [class.error]="email?.invalid && email?.touched" />
-            <div *ngIf="email?.invalid && email?.touched" class="error-message">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Email Address</mat-label>
+            <input matInput type="email" formControlName="email" autocomplete="email" placeholder="Enter your email" />
+            <mat-icon matPrefix>email</mat-icon>
+            <mat-error *ngIf="email?.invalid && email?.touched">
               <span *ngIf="email?.errors?.['required']">Email is required</span>
               <span *ngIf="email?.errors?.['email']">Please enter a valid email</span>
-            </div>
-          </div>
+            </mat-error>
+          </mat-form-field>
 
           <!-- Password Field -->
-          <div class="form-group">
-            <label for="password" class="form-label">Password</label>
-            <div class="password-input-wrapper">
-              <input autocomplete="new-password" [type]="showPassword ? 'text' : 'password'" id="password" formControlName="password" placeholder="Create a strong password" class="form-input" [class.error]="password?.invalid && password?.touched" />
-              <button type="button" (click)="togglePasswordVisibility()" class="password-toggle">
-                {{ showPassword ? 'Hide' : 'Show' }}
-              </button>
-            </div>
-            <div *ngIf="password?.invalid && password?.touched" class="error-message">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Password</mat-label>
+            <input matInput [type]="showPassword ? 'text' : 'password'" formControlName="password" autocomplete="new-password" placeholder="Create a strong password" />
+            <mat-icon matPrefix>lock</mat-icon>
+            <button mat-icon-button matSuffix type="button" (click)="togglePasswordVisibility()" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="showPassword">
+              <mat-icon>{{showPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngIf="password?.invalid && password?.touched">
               <span *ngIf="password?.errors?.['required']">Password is required</span>
               <span *ngIf="password?.errors?.['minlength']">Password must be at least 6 characters</span>
-            </div>
-          </div>
+            </mat-error>
+          </mat-form-field>
 
           <!-- Terms & Conditions -->
           <div class="form-group">
-            <label class="checkbox-label">
-              <input type="checkbox" formControlName="agreeToTerms" class="checkbox-input" />
-              <span class="checkbox-text">
-                I agree to the <a href="#" class="terms-link">Terms & Conditions</a>
-              </span>
-            </label>
+            <mat-checkbox formControlName="agreeToTerms" class="terms-checkbox">
+              I agree to the <a href="#" class="terms-link">Terms & Conditions</a>
+            </mat-checkbox>
             <div *ngIf="agreeToTerms?.invalid && agreeToTerms?.touched" class="error-message">
               <span>You must agree to the Terms & Conditions</span>
             </div>
           </div>
 
           <!-- Create Account Button -->
-          <button type="submit" class="btn-primary" [disabled]="signupForm.invalid">Create Account</button>
+          <button mat-raised-button color="primary" type="submit" class="btn-primary" [disabled]="signupForm.invalid">
+            Create Account
+          </button>
         </form>
 
         <!-- Divider -->
@@ -102,7 +102,7 @@
         </div>
 
         <!-- Google Signup -->
-        <button type="button" (click)="onGoogleSignup()" class="btn-google">
+        <button mat-stroked-button type="button" (click)="onGoogleSignup()" class="btn-google">
           <img src="assets/svg/google.svg" alt="Google" class="google-icon">
           <span>Sign up with Google</span>
         </button>
