@@ -26,10 +26,79 @@
 
     <!-- User Actions -->
     <div class="navbar-actions">
-      <a href="#" class="action-item">
-        <img src="assets/svg/profile.svg" alt="Profile" class="action-icon">
-        <span class="action-label">Profile</span>
-      </a>
+      <div #profileDropdownWrapper class="profile-dropdown-wrapper" (mouseenter)="showProfileDropdown = true">
+        <a href="#" class="action-item" [class.active]="showProfileDropdown">
+          <img src="assets/svg/profile.svg" alt="Profile" class="action-icon">
+          <span class="action-label">Profile</span>
+        </a>
+
+        <!-- Profile Dropdown -->
+        <div class="profile-dropdown" *ngIf="showProfileDropdown">
+          <div class="dropdown-content">
+            <!-- User Info Section (Different for logged in/out) -->
+            <div *ngIf="!isLoggedIn()" class="welcome-section">
+              <h3 class="welcome-title">Welcome</h3>
+              <p class="welcome-subtitle">To access account and manage orders</p>
+            </div>
+
+            <div *ngIf="isLoggedIn()" class="user-info-section">
+              <h3 class="user-greeting">Hello {{ userName() }}</h3>
+              <p class="user-phone" *ngIf="userPhone()">{{ userPhone() }}</p>
+            </div>
+
+            <!-- Login Button (Only for not logged in) -->
+            <button *ngIf="!isLoggedIn()" mat-stroked-button class="login-signup-btn" (click)="onLogin()" routerLink="/auth/login">
+              LOGIN / SIGNUP
+            </button>
+
+            <!-- Common Links Section 1 -->
+            <ng-container *ngTemplateOutlet="commonLinksSection1"></ng-container>
+
+            <!-- Common Links Section 2 -->
+            <ng-container *ngTemplateOutlet="commonLinksSection2"></ng-container>
+
+            <!-- Logged In Only Section -->
+            <ng-container *ngIf="isLoggedIn()">
+              <div class="dropdown-divider"></div>
+              <ul class="dropdown-links">
+                <li><a routerLink="/edit-profile" class="dropdown-link">Edit Profile</a></li>
+                <li><a href="#" class="dropdown-link" (click)="onLogout($event)">Logout</a></li>
+              </ul>
+            </ng-container>
+          </div>
+        </div>
+
+        <!-- Templates -->
+        <ng-template #commonLinksSection1>
+          <div class="dropdown-divider"></div>
+          <ul class="dropdown-links">
+            <li><a routerLink="/orders" class="dropdown-link">Orders</a></li>
+            <li><a routerLink="/wishlist" class="dropdown-link">Wishlist</a></li>
+            <li><a routerLink="/gift-cards" class="dropdown-link">Gift Cards</a></li>
+            <li><a routerLink="/contact" class="dropdown-link">Contact Us</a></li>
+            <li>
+              <a routerLink="/insider" class="dropdown-link">
+                ShopHub Insider
+                <span class="new-badge-small">New</span>
+              </a>
+            </li>
+          </ul>
+        </ng-template>
+
+        <ng-template #commonLinksSection2>
+          <div class="dropdown-divider"></div>
+          <ul class="dropdown-links">
+            <li><a routerLink="/credit" class="dropdown-link">ShopHub Credit</a></li>
+            <li><a routerLink="/coupons" class="dropdown-link">Coupons</a></li>
+            <li><a routerLink="/saved-cards" class="dropdown-link">Saved Cards</a></li>
+            <li><a routerLink="/saved-vpa" class="dropdown-link" *ngIf="!isLoggedIn()">Saved VPA</a></li>
+            <li><a routerLink="/saved-upi" class="dropdown-link" *ngIf="isLoggedIn()">Saved UPI</a></li>
+            <li><a routerLink="/wallets" class="dropdown-link" *ngIf="isLoggedIn()">Wallets/BNPL</a></li>
+            <li><a routerLink="/saved-addresses" class="dropdown-link">Saved Addresses</a></li>
+          </ul>
+        </ng-template>
+      </div>
+
       <a href="#" class="action-item">
         <img src="assets/svg/wishlist.svg" alt="Wishlist" class="action-icon">
         <span class="action-label">Wishlist</span>

@@ -1,13 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { DecorativeElementsComponent } from '../decorative-elements/decorative-elements.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -29,8 +30,10 @@ import { MatIconModule } from '@angular/material/icon';
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   showPassword = false;
-
-  constructor(private fb: FormBuilder) {}
+  
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private fb = inject(FormBuilder);
 
   ngOnInit() {
     this.loginForm = this.fb.group({
@@ -46,8 +49,18 @@ export class LoginComponent implements OnInit {
 
   onLogin() {
     if (this.loginForm.valid) {
-      // Handle login logic here
-      console.log('Login attempt', this.loginForm.value);
+      const { email, password, rememberMe } = this.loginForm.value;
+      
+      // Use auth service to login
+      const success = this.authService.login(email, password, rememberMe);
+      
+      if (success) {
+        // Navigate to home or dashboard
+        this.router.navigate(['/']);
+      } else {
+        // Handle login error
+        console.error('Login failed');
+      }
     } else {
       // Mark all fields as touched to show validation errors
       Object.keys(this.loginForm.controls).forEach(key => {

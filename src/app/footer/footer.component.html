@@ -1,0 +1,86 @@
+<footer class="footer">
+  <div class="footer-container">
+    <!-- Main Footer Content -->
+    <div class="footer-main">
+      <!-- About Section -->
+      <div class="footer-section">
+        <h3 class="footer-title">ShopHub</h3>
+        <p class="footer-description">
+          Your one-stop destination for fashion, lifestyle, and home essentials. 
+          We offer a curated selection of high-quality products at unbeatable prices, 
+          delivered right to your doorstep.
+        </p>
+        <div class="social-links">
+          <a *ngFor="let social of socialLinks" [href]="social.url" target="_blank" rel="noopener noreferrer" class="social-link" [attr.aria-label]="social.label">
+            <mat-icon>{{ social.icon }}</mat-icon>
+          </a>
+        </div>
+      </div>
+
+      <!-- Shop Categories -->
+      <div class="footer-section">
+        <h4 class="footer-heading">Shop</h4>
+        <ul class="footer-links">
+          <li *ngFor="let item of categories.shop">
+            <a [routerLink]="item.route" class="footer-link">{{ item.label }}</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Customer Service -->
+      <div class="footer-section">
+        <h4 class="footer-heading">Customer Service</h4>
+        <ul class="footer-links">
+          <li *ngFor="let item of categories.customerService">
+            <a [routerLink]="item.route" class="footer-link">{{ item.label }}</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- About -->
+      <div class="footer-section">
+        <h4 class="footer-heading">About</h4>
+        <ul class="footer-links">
+          <li *ngFor="let item of categories.about">
+            <a [routerLink]="item.route" class="footer-link">{{ item.label }}</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Legal -->
+      <div class="footer-section">
+        <h4 class="footer-heading">Legal</h4>
+        <ul class="footer-links">
+          <li *ngFor="let item of categories.legal">
+            <a [routerLink]="item.route" class="footer-link">{{ item.label }}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Footer Bottom -->
+    <div class="footer-bottom">
+      <div class="footer-bottom-content">
+        <div class="copyright">
+          <p>&copy; {{ currentYear }} ShopHub. All rights reserved.</p>
+        </div>
+        
+        <div class="footer-actions">
+          <!-- Language Selector -->
+          <mat-form-field appearance="outline" class="language-selector">
+            <mat-label>Language</mat-label>
+            <mat-select [(ngModel)]="selectedLanguage" (ngModelChange)="onLanguageChange($event)" name="language">
+              <mat-option *ngFor="let lang of languages" [value]="lang.value">
+                <span class="language-option">
+                  <span class="language-flag">{{ lang.flag }}</span>
+                  <span class="language-label">{{ lang.label }}</span>
+                </span>
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+

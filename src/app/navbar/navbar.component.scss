@@ -138,6 +138,10 @@
   align-items: center;
   gap: 1.5rem;
 
+  .profile-dropdown-wrapper {
+    position: relative;
+  }
+
   .action-item {
     display: flex;
     flex-direction: column;
@@ -156,6 +160,23 @@
       }
     }
 
+    &.active {
+      .action-label {
+        color: var(--color-primary);
+      }
+      
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -4px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60%;
+        height: 2px;
+        background: var(--color-primary);
+      }
+    }
+
     .action-icon {
       width: 24px;
       height: 24px;
@@ -166,6 +187,7 @@
     .action-label {
       font-size: 0.75rem;
       font-weight: 500;
+      transition: color var(--transition-base);
     }
 
     &.bag-item {
@@ -189,6 +211,133 @@
   }
 }
 
+// Profile Dropdown Styles
+.profile-dropdown {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  width: 260px;
+  background: var(--color-bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  z-index: 1001;
+  animation: fadeInDown 0.2s ease-out;
+  overflow: hidden;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-content {
+  padding: 1rem 1.25rem;
+}
+
+.welcome-section,
+.user-info-section {
+  margin-bottom: 0.75rem;
+}
+
+.welcome-title,
+.user-greeting {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0 0 0.25rem 0;
+}
+
+.welcome-subtitle {
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.user-phone {
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+  margin: 0.25rem 0 0 0;
+}
+
+.login-signup-btn {
+  width: 100%;
+  margin: 0.75rem 0;
+  padding: 0.625rem;
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
+  
+  &:hover {
+    background-color: var(--color-primary);
+    color: var(--color-text-white);
+  }
+  
+  ::ng-deep {
+    .mdc-button__label {
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+  }
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: var(--color-border);
+  margin: 0.75rem 0;
+}
+
+.dropdown-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  
+  li {
+    margin-bottom: 0.375rem;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.dropdown-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--color-text-primary);
+  text-decoration: none;
+  font-size: 0.875rem;
+  padding: 0.5rem 0;
+  transition: color var(--transition-base);
+  
+  &:hover {
+    color: var(--color-primary);
+  }
+}
+
+.new-badge-small {
+  background: var(--color-error);
+  color: var(--color-text-white);
+  font-size: 0.625rem;
+  font-weight: 600;
+  padding: 0.125rem 0.375rem;
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
+  margin-left: 0.5rem;
+}
+
 @media (max-width: 1024px) {
   .navbar-container {
     padding: 1rem;
@@ -205,5 +354,21 @@
 
   .navbar-search {
     max-width: 250px;
+  }
+  
+  .profile-dropdown {
+    width: 260px;
+    right: -1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .profile-dropdown {
+    width: 240px;
+    right: -0.5rem;
+  }
+  
+  .dropdown-content {
+    padding: 1.25rem;
   }
 }

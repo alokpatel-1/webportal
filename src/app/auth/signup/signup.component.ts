@@ -1,13 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { DecorativeElementsComponent } from '../decorative-elements/decorative-elements.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-signup',
@@ -29,8 +30,10 @@ import { MatIconModule } from '@angular/material/icon';
 export class SignupComponent implements OnInit {
   signupForm!: FormGroup;
   showPassword = false;
-
-  constructor(private fb: FormBuilder) {}
+  
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private fb = inject(FormBuilder);
 
   ngOnInit() {
     this.signupForm = this.fb.group({
@@ -47,8 +50,18 @@ export class SignupComponent implements OnInit {
 
   onSignup() {
     if (this.signupForm.valid) {
-      // Handle signup logic here
-      console.log('Signup attempt', this.signupForm.value);
+      const { fullName, email, password } = this.signupForm.value;
+      
+      // Use auth service to signup
+      const success = this.authService.signup(fullName, email, password);
+      
+      if (success) {
+        // Navigate to home or dashboard
+        this.router.navigate(['/']);
+      } else {
+        // Handle signup error
+        console.error('Signup failed');
+      }
     } else {
       // Mark all fields as touched to show validation errors
       Object.keys(this.signupForm.controls).forEach(key => {
