@@ -1,0 +1,33 @@
+<div class="auth-overlay" *ngIf="visible">
+    <div class="auth-box" (click)="$event.stopPropagation()">
+        <button class="close-btn" (click)="close()">
+            <i class="pi pi-times"></i>
+        </button>
+
+        <div class="auth-header">
+            <div class="logo">
+                <span class="logo__text"><span class="accent">rep</span>twin</span>
+                <span class="logo__sub">powered by Xoom</span>
+            </div>
+            <h2 class="auth-title">
+                <ng-container *ngIf="mode() === AuthMode.Login">Sign in to your account</ng-container>
+                <ng-container *ngIf="mode() === AuthMode.Signup">Create your account</ng-container>
+                <ng-container *ngIf="mode() === AuthMode.ForgotPassword">Reset Password</ng-container>
+            </h2>
+        </div>
+
+        <div class="auth-body">
+            <!-- Login Form Component -->
+            <app-login-form *ngIf="mode() === AuthMode.Login" (submitLogin)="onLoginSubmit($event)" (switchToSignup)="switchMode(AuthMode.Signup)" (switchToForgotPassword)="switchMode(AuthMode.ForgotPassword)">
+            </app-login-form>
+
+            <!-- Signup Form Component -->
+            <app-signup-form *ngIf="mode() === AuthMode.Signup" (submitSignup)="onSignupSubmit($event)" (switchToLogin)="switchMode(AuthMode.Login)">
+            </app-signup-form>
+
+            <!-- Forgot Password Form Component -->
+            <app-forgot-password-form *ngIf="mode() === AuthMode.ForgotPassword" (submitForgotPassword)="onForgotPasswordSubmit($event)" (switchToLogin)="switchMode(AuthMode.Login)">
+            </app-forgot-password-form>
+        </div>
+    </div>
+</div>

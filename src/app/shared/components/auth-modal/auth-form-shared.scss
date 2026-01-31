@@ -1,0 +1,125 @@
+/* Shared Form Styles for Auth Components */
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 1.25rem;
+
+    label {
+        display: block;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #6b7280;
+        margin-bottom: 0.5rem;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+    }
+}
+
+.input-wrapper {
+    position: relative;
+
+    .custom-input {
+        width: 100%;
+        padding: 0.875rem 1rem 0.875rem 2.75rem;
+        /* Space for icon */
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.75rem;
+        font-size: 0.9375rem;
+        color: #111827;
+        outline: none;
+        transition: all 0.2s;
+
+        &:focus {
+            border-color: #7c3aed;
+            background: #fff;
+            box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.1);
+        }
+    }
+
+    .input-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #9ca3af;
+        font-size: 1rem;
+        pointer-events: none;
+    }
+
+    .input-icon-right {
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #9ca3af;
+        cursor: pointer;
+        font-size: 1rem;
+
+        &:hover {
+            color: #4b5563;
+        }
+    }
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1.5rem;
+}
+
+.link-btn {
+    font-size: 0.875rem;
+    color: #7c3aed;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: 500;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+::ng-deep .submit-btn {
+    width: 100%;
+    background-color: #7c3aed !important;
+    border: none !important;
+    border-radius: 0.75rem !important;
+    padding: 0.875rem 1rem !important;
+    font-weight: 600 !important;
+    font-size: 1rem !important;
+
+    &:hover {
+        background-color: #6d28d9 !important;
+    }
+
+    .p-button-label {
+        font-weight: 600;
+    }
+}
+
+.auth-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.9375rem;
+    color: #6b7280;
+}
+
+.link-highlight {
+    color: #7c3aed;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.error-msg {
+    display: block;
+    color: #ef4444;
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+    margin-left: 0.25rem;
+}

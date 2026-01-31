@@ -8,15 +8,24 @@
     </a>
 
     <nav class="nav">
-      <a href="#" class="nav__link nav__link--dropdown">
-        Solutions
-        <svg class="nav__chevron" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M6 9l6 6 6-6" />
-        </svg>
-      </a>
-      <a href="#" class="nav__link">Platform</a>
-      <a href="#" class="nav__link">Pricing</a>
-      <a href="#" class="nav__link">About</a>
+      <div class="nav__item" *ngFor="let menu of megaMenuItems" (mouseenter)="activeMegaMenu = menu.id" (mouseleave)="activeMegaMenu = null">
+        <a [routerLink]="[]" class="nav__link nav__link--mega" [class.active]="activeMegaMenu === menu.id">
+          {{ menu.label }}
+        </a>
+
+        <div class="mega-menu" *ngIf="activeMegaMenu === menu.id">
+          <div class="mega-menu__inner">
+            <div class="mega-menu__column" *ngFor="let col of menu.columns">
+              <h3 class="mega-menu__title">{{ col.title }}</h3>
+              <ul class="mega-menu__list">
+                <li *ngFor="let item of col.items">
+                  <a [routerLink]="item.route" class="mega-menu__link">{{ item.label }}</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
     </nav>
 
     <div class="top-bar__right">
@@ -30,7 +39,7 @@
           <path d="M6 9l6 6 6-6" />
         </svg>
       </button>
-      <a href="#" class="top-bar__login">Login</a>
+      <a (click)="openAuthModal()" class="top-bar__login" style="cursor: pointer;">Login</a>
 
       <!-- User Menu -->
       <div class="user-menu-container">
@@ -64,6 +73,9 @@
       </div>
       <!-- End User Menu -->
 
+
+      <!-- Auth Modal -->
+      <app-auth-modal [(visible)]="showAuthModal"></app-auth-modal>
     </div>
   </div>
 </header>
