@@ -1,6 +1,8 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { Menu, MenuModule } from 'primeng/menu';
+import { MenuItem } from 'primeng/api';
 
 export interface SidebarOrg {
   name: string;
@@ -31,7 +33,7 @@ export interface SidebarUser {
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, MenuModule],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss'
 })
@@ -43,9 +45,83 @@ export class SidebarComponent {
 
   @Output() toggleContext = new EventEmitter<void>();
 
+  @ViewChild('userMenu') userMenu!: Menu;
+
+  userMenuItems: MenuItem[] = [];
+
+  ngOnInit() {
+    this.updateMenuItems();
+  }
+
+  updateMenuItems() {
+    this.userMenuItems = [
+      {
+        label: 'Profile',
+        icon: 'pi pi-user',
+        command: () => this.onProfile()
+      },
+      {
+        separator: true
+      },
+      {
+        label: 'Logout',
+        icon: 'pi pi-sign-out',
+        command: () => this.onLogout(),
+        styleClass: 'logout-item'
+      }
+    ];
+
+    // Add invite option if user has admin/owner role
+    if (this.organizations.length > 0 && this.canInvite(this.organizations[0].role)) {
+      this.userMenuItems.splice(1, 0, {
+        label: 'Invite',
+        icon: 'pi pi-user-plus',
+        command: () => this.onInvite()
+      });
+    }
+  }
+
+  showOrgSwitcher = false;
+
   // Toggle internal collapsed state if no external control is preferred
   // or simple binding. Here we assume internal control for demo.
   toggleCollapse() {
     this.collapsed = !this.collapsed;
+    if (this.collapsed) {
+      this.showOrgSwitcher = false;
+    }
+  }
+
+  toggleOrgSwitcher() {
+    if (!this.collapsed) {
+      this.showOrgSwitcher = !this.showOrgSwitcher;
+    }
+  }
+
+  toggleUserMenu(event: Event) {
+    if (!this.collapsed) {
+      this.userMenu.toggle(event);
+      this.showOrgSwitcher = false; // Close org switcher if user menu opens
+    }
+  }
+
+  onProfile() {
+    console.log('Navigate to profile');
+    // TODO: Implement navigation to profile
+  }
+
+  onInvite() {
+    console.log('Open invite modal');
+    // TODO: Implement invite functionality
+  }
+
+  onLogout() {
+    console.log('Logout user');
+    // TODO: Implement logout functionality
+  }
+
+  canInvite(role: string): boolean {
+    // Show invite option for Owner, Brand, or any admin role
+    return role === 'Owner' || role === 'Brand' || role.toLowerCase().includes('admin');
   }
 }

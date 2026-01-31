@@ -59,27 +59,20 @@
 
 .logo {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 1rem;
+    justify-content: center;
+    margin-bottom: 0.5rem;
 }
 
-.logo__text {
-    font-size: 1.75rem;
-    font-weight: 600;
+.logo__brand {
+    font-size: 2.25rem;
+    font-weight: 700;
     color: #111827;
-    line-height: 1;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.04em;
+    line-height: normal;
 
     .accent {
-        color: #7c3aed;
+        color: #0d9488; // teal-600
     }
-}
-
-.logo__sub {
-    font-size: 0.65rem;
-    color: #6b7280;
-    margin-top: 0.25rem;
 }
 
 .auth-title {

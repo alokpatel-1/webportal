@@ -4,30 +4,75 @@
   <div class="sidebar__header">
     <div class="logo">
       <span class="logo__text" *ngIf="!collapsed">
-        <span class="text-purple-600">rep</span>twin.ai
+        <span class="text-teal-600 font-bold">Open</span><span class="text-navy-900 font-semibold">Mart</span>
       </span>
-      <span class="logo__icon" *ngIf="collapsed">r</span>
+      <span class="logo__icon" *ngIf="collapsed">O</span>
     </div>
     <button class="toggle-btn" (click)="toggleCollapse()">
       <i class="pi" [class.pi-angle-left]="!collapsed" [class.pi-angle-right]="collapsed"></i>
     </button>
   </div>
 
-  <!-- Organizations -->
-  <div class="sidebar__orgs" *ngIf="organizations.length">
-    <div *ngFor="let org of organizations" class="org-item">
-      <div class="org-avatar" [ngClass]="org.bgColorClass">
-        {{ org.initial }}
+  <!-- Organization Switcher -->
+  <div class="sidebar__org-switcher" *ngIf="organizations.length">
+    <div class="org-header" (click)="toggleOrgSwitcher()" [class.active]="showOrgSwitcher">
+      <div class="org-avatar bg-purple-600">
+        {{ organizations[0].initial }}
       </div>
       <div class="org-info" *ngIf="!collapsed">
-        <div class="org-name">{{ org.name }}</div>
-        <div class="org-role">
-          <i class="pi pi-crown text-[10px] mr-1" *ngIf="org.role === 'Owner'"></i>
-          <i class="pi pi-building text-[10px] mr-1" *ngIf="org.role === 'Brand'"></i>
-          {{ org.role }}
+        <div class="org-name-wrapper">
+          <span class="org-name">{{ organizations[0].name }}</span>
+        </div>
+        <div class="org-role-wrapper">
+          <i class="pi pi-crown text-amber-500 text-[10px] mr-1"></i>
+          <span class="org-role">{{ organizations[0].role }}</span>
         </div>
       </div>
-      <i class="pi pi-angle-down ml-auto text-gray-400 text-xs" *ngIf="!collapsed"></i>
+      <i class="pi ml-auto text-gray-400 text-xs" [class.pi-angle-down]="!showOrgSwitcher" [class.pi-angle-up]="showOrgSwitcher" *ngIf="!collapsed"></i>
+    </div>
+
+    <!-- Org Dropdown Panel -->
+    <div class="org-switcher-panel" *ngIf="showOrgSwitcher && !collapsed">
+      <div class="panel-section">
+        <div class="section-label">YOUR ORGANIZATIONS</div>
+        <div class="org-item active">
+          <div class="org-avatar bg-purple-600">
+            {{ organizations[0].initial }}
+          </div>
+          <div class="org-info">
+            <div class="org-name-wrapper">
+              <span class="org-name">{{ organizations[0].name }}</span>
+            </div>
+            <div class="org-role-wrapper">
+              <i class="pi pi-crown text-amber-500 text-[10px] mr-1"></i>
+              <span class="org-role">{{ organizations[0].role }}</span>
+            </div>
+          </div>
+          <i class="pi pi-check text-purple-600 ml-auto text-sm"></i>
+        </div>
+      </div>
+
+      <div class="panel-divider"></div>
+
+      <div class="panel-section">
+        <div class="panel-link" (click)="onInvite()">
+          <i class="pi pi-users"></i>
+          <span>Manage Members</span>
+        </div>
+        <div class="panel-link">
+          <i class="pi pi-cog"></i>
+          <span>Organization Settings</span>
+        </div>
+      </div>
+
+      <div class="panel-divider"></div>
+
+      <div class="panel-section">
+        <div class="panel-link create-org">
+          <i class="pi pi-plus"></i>
+          <span>Create New Organization</span>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -48,15 +93,20 @@
     </ng-container>
   </div>
 
-  <!-- User Profile -->
+  <!-- User Profile with Menu -->
   <div class="sidebar__footer" *ngIf="user">
-    <div class="user-avatar" [ngClass]="user.bgColorClass">
-      {{ user.initial }}
+    <div class="user-section" (click)="toggleUserMenu($event)">
+      <div class="user-avatar" [ngClass]="user.bgColorClass">
+        {{ user.initial }}
+      </div>
+      <div class="user-info" *ngIf="!collapsed">
+        <div class="user-name">{{ user.name }}</div>
+        <div class="user-email" [title]="user.email">{{ user.email }}</div>
+      </div>
+      <i class="pi pi-ellipsis-v text-gray-400 ml-auto" *ngIf="!collapsed"></i>
     </div>
-    <div class="user-info" *ngIf="!collapsed">
-      <div class="user-name">{{ user.name }}</div>
-      <div class="user-email" [title]="user.email">{{ user.email }}</div>
-    </div>
+
+    <p-menu #userMenu [model]="userMenuItems" [popup]="true" styleClass="user-menu"></p-menu>
   </div>
 
 </aside>

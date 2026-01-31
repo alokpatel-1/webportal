@@ -64,7 +64,7 @@ export class SuperAdminLayoutComponent {
 
   user = {
     name: 'Alok Patel',
-    email: 'alok.patel_demo_4@reptwin.com',
+    email: 'alok.patel_demo_4@openmart.com',
     initial: 'A',
     bgColorClass: 'bg-purple-600'
   };
