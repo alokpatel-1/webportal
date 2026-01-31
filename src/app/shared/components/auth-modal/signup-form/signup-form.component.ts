@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
@@ -14,6 +14,7 @@ import { InputTextModule } from 'primeng/inputtext';
 export class SignupFormComponent {
     @Output() submitSignup = new EventEmitter<{ name: string; email: string; password: string }>();
     @Output() switchToLogin = new EventEmitter<void>();
+    @Input() isLoading = false;
 
     signupForm: FormGroup;
     showPassword = false;
@@ -49,7 +50,7 @@ export class SignupFormComponent {
     }
 
     onSubmit() {
-        if (this.signupForm.valid) {
+        if (this.signupForm.valid && !this.isLoading) {
             // Emit only name, email, and password (exclude confirmPassword)
             const { name, email, password } = this.signupForm.value;
             this.submitSignup.emit({ name, email, password });

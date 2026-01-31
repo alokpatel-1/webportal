@@ -1,11 +1,11 @@
 import { Routes } from '@angular/router';
-import { SuperAdminLayoutComponent } from './super-admin-layout.component';
+import { ManagementLayoutComponent } from '../../layouts/management-layout/management-layout.component';
 import { SuperAdminDashboardComponent } from './super-admin-dashboard.component';
 
 export const superAdminRoutes: Routes = [
   {
     path: '',
-    component: SuperAdminLayoutComponent,
+    component: ManagementLayoutComponent,
     children: [
       { path: '', component: SuperAdminDashboardComponent }
     ]

@@ -1,0 +1,12 @@
+<div class="public-layout">
+    <app-top-bar></app-top-bar>
+    <div class="layout-container">
+        <aside *ngIf="showFilter" class="filter-sidebar">
+            <app-product-filter [sections]="filterSections" (filterChange)="onFilterChange($event)"></app-product-filter>
+        </aside>
+        <main class="main-content">
+            <router-outlet></router-outlet>
+        </main>
+    </div>
+    <app-footer></app-footer>
+</div>

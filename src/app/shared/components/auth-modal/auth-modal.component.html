@@ -18,17 +18,36 @@
         </div>
 
         <div class="auth-body">
-            <!-- Login Form Component -->
-            <app-login-form *ngIf="mode() === AuthMode.Login" (submitLogin)="onLoginSubmit($event)" (switchToSignup)="switchMode(AuthMode.Signup)" (switchToForgotPassword)="switchMode(AuthMode.ForgotPassword)">
-            </app-login-form>
+            <!-- Loading Overlay -->
+            <div class="loading-overlay" *ngIf="isLoading()">
+                <i class="pi pi-spin pi-spinner text-4xl text-brand-primary"></i>
+            </div>
 
-            <!-- Signup Form Component -->
-            <app-signup-form *ngIf="mode() === AuthMode.Signup" (submitSignup)="onSignupSubmit($event)" (switchToLogin)="switchMode(AuthMode.Login)">
-            </app-signup-form>
+            <!-- Messages -->
+            <div class="success-message" *ngIf="successMessage()">
+                <i class="pi pi-check-circle text-2xl mb-2"></i>
+                <p>{{ successMessage() }}</p>
+            </div>
 
-            <!-- Forgot Password Form Component -->
-            <app-forgot-password-form *ngIf="mode() === AuthMode.ForgotPassword" (submitForgotPassword)="onForgotPasswordSubmit($event)" (switchToLogin)="switchMode(AuthMode.Login)">
-            </app-forgot-password-form>
+            <div class="error-message" *ngIf="errorMessage()">
+                <i class="pi pi-exclamation-circle mr-2"></i>
+                <span>{{ errorMessage() }}</span>
+            </div>
+
+            <!-- Forms -->
+            <ng-container *ngIf="!successMessage()">
+                <!-- Login Form Component -->
+                <app-login-form *ngIf="mode() === AuthMode.Login" (submitLogin)="onLoginSubmit($event)" (switchToSignup)="switchMode(AuthMode.Signup)" (switchToForgotPassword)="switchMode(AuthMode.ForgotPassword)">
+                </app-login-form>
+
+                <!-- Signup Form Component -->
+                <app-signup-form *ngIf="mode() === AuthMode.Signup" [isLoading]="isLoading()" (submitSignup)="onSignupSubmit($event)" (switchToLogin)="switchMode(AuthMode.Login)">
+                </app-signup-form>
+
+                <!-- Forgot Password Form Component -->
+                <app-forgot-password-form *ngIf="mode() === AuthMode.ForgotPassword" (submitForgotPassword)="onForgotPasswordSubmit($event)" (switchToLogin)="switchMode(AuthMode.Login)">
+                </app-forgot-password-form>
+            </ng-container>
         </div>
     </div>
 </div>

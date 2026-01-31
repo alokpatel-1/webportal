@@ -1,11 +1,11 @@
 import { Routes } from '@angular/router';
-import { UserLayoutComponent } from './user-layout.component';
+import { PublicLayoutComponent } from '../../layouts/public-layout/public-layout.component';
 import { UserDashboardComponent } from './user-dashboard.component';
 
 export const userRoutes: Routes = [
   {
     path: '',
-    component: UserLayoutComponent,
+    component: PublicLayoutComponent,
     children: [
       { path: '', component: UserDashboardComponent }
     ]

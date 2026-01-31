@@ -1,8 +1,10 @@
-import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
+import { Component, EventEmitter, Input, Output, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { SignupFormComponent } from './signup-form/signup-form.component';
 import { ForgotPasswordFormComponent } from './forgot-password-form/forgot-password-form.component';
+import { AuthService, RegisterPayload } from '../../../core/services/auth.service';
+import { finalize } from 'rxjs';
 
 export enum AuthMode {
     Login = 'login',
@@ -21,40 +23,64 @@ export class AuthModalComponent {
     @Input() visible = false;
     @Output() visibleChange = new EventEmitter<boolean>();
 
+    private authService = inject(AuthService);
+
     // Expose enum to template
     readonly AuthMode = AuthMode;
 
-    // Signal for current auth mode
+    // Signals for state
     mode = signal<AuthMode>(AuthMode.Login);
+    isLoading = signal<boolean>(false);
+    successMessage = signal<string | null>(null);
+    errorMessage = signal<string | null>(null);
 
     close() {
         this.visible = false;
         this.visibleChange.emit(false);
-        this.mode.set(AuthMode.Login); // Reset to login on close
+        this.resetState();
+    }
+
+    resetState() {
+        this.mode.set(AuthMode.Login);
+        this.successMessage.set(null);
+        this.errorMessage.set(null);
+        this.isLoading.set(false);
     }
 
     switchMode(newMode: AuthMode) {
         this.mode.set(newMode);
+        this.successMessage.set(null);
+        this.errorMessage.set(null);
     }
 
     // Handle login submission
     onLoginSubmit(credentials: { email: string; password: string }) {
         console.log('Logging in...', credentials);
-        // Implement actual login logic here
-        // this.authService.login(credentials).subscribe(...)
     }
 
     // Handle signup submission
-    onSignupSubmit(data: { name: string; email: string; password: string }) {
-        console.log('Signing up...', data);
-        // Implement actual signup logic here
-        // this.authService.signup(data).subscribe(...)
+    onSignupSubmit(data: RegisterPayload) {
+        this.isLoading.set(true);
+        this.errorMessage.set(null);
+        this.successMessage.set(null);
+
+        this.authService.register(data)
+            .pipe(finalize(() => this.isLoading.set(false)))
+            .subscribe({
+                next: (res) => {
+                    this.successMessage.set(res.message);
+                    console.log('Signup successful:', res);
+                    // Optionally switch to login or show success screen
+                },
+                error: (err) => {
+                    this.errorMessage.set(err.error?.message || 'Registration failed. Please try again.');
+                    console.error('Signup error:', err);
+                }
+            });
     }
 
     // Handle forgot password submission
     onForgotPasswordSubmit(data: { email: string }) {
         console.log('Resetting password...', data);
-        // Implement actual password reset logic here
-        // this.authService.resetPassword(data).subscribe(...)
     }
 }

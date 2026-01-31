@@ -1,7 +1,13 @@
 import { Routes } from '@angular/router';
 
+import { PublicLayoutComponent } from './layouts/public-layout/public-layout.component';
+
 export const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'user' },
+  {
+    path: '',
+    component: PublicLayoutComponent,
+    loadChildren: () => import('./modules/landing/landing.routes').then(m => m.landingRoutes)
+  },
   {
     path: 'user',
     loadChildren: () => import('./modules/user/user.routes').then(m => m.userRoutes)
@@ -18,5 +24,5 @@ export const routes: Routes = [
     path: 'seller',
     loadChildren: () => import('./modules/seller/seller.routes').then(m => m.sellerRoutes)
   },
-  { path: '**', redirectTo: 'user' }
+  { path: '**', redirectTo: '' }
 ];

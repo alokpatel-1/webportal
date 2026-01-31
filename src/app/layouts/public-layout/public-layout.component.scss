@@ -1,0 +1,28 @@
+.public-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.layout-container {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+.filter-sidebar {
+    width: 300px;
+    flex-shrink: 0;
+    border-right: 1px solid var(--color-border);
+    background-color: var(--color-bg-white);
+    height: calc(100vh - 64px); // Adjusted for TopBar height
+    position: sticky;
+    top: 64px;
+    overflow-y: auto;
+}
+
+.main-content {
+    flex: 1;
+    background-color: var(--color-bg-app);
+    overflow-y: auto;
+}

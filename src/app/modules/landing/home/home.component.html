@@ -1,0 +1,98 @@
+<div class="home-container">
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero__content">
+            <span class="hero__badge">New Season Arrival</span>
+            <h1 class="hero__title">Elegance in Every <span class="highlight">Stitch</span></h1>
+            <p class="hero__subtitle">Discover our latest collection of premium apparel designed for the modern lifestyle. Quality meets comfort in every piece.</p>
+            <div class="hero__actions">
+                <p-button label="Shop Collection" icon="pi pi-shopping-bag" styleClass="p-button-lg p-button-rounded hero-btn"></p-button>
+                <p-button label="View Lookbook" styleClass="p-button-lg p-button-text p-button-rounded lookbook-btn"></p-button>
+            </div>
+        </div>
+        <div class="hero__image-container">
+            <div class="image-wrapper">
+                <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=2070&auto=format&fit=crop" alt="Hero Collection" class="hero-image">
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories section-padding">
+        <div class="section-header">
+            <h2 class="section-title">Shop by Category</h2>
+            <p class="section-subtitle">Explore our wide range of carefully curated collections.</p>
+        </div>
+        <div class="category-grid">
+            <div *ngFor="let cat of categories" class="category-card" [style.background-image]="'url(' + cat.image + ')'">
+                <div class="category-card__overlay">
+                    <div class="category-card__content">
+                        <h3>{{ cat.name }}</h3>
+                        <span>{{ cat.count }}</span>
+                        <p-button label="Explore" icon="pi pi-arrow-right" iconPos="right" styleClass="p-button-text p-button-sm"></p-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="featured section-padding bg-gray-50">
+        <div class="section-header">
+            <h2 class="section-title">Trending Now</h2>
+            <p class="section-subtitle">Our most popular pieces liked by thousands.</p>
+        </div>
+        <div class="product-grid">
+            <div *ngFor="let prod of featuredProducts" class="product-card">
+                <div class="product-card__image">
+                    <img [src]="prod.image" [alt]="prod.name">
+                    <button class="wishlist-btn"><i class="pi pi-heart"></i></button>
+                    <div class="product-card__actions">
+                        <p-button label="Quick View" icon="pi pi-eye" styleClass="active-btn p-button-sm"></p-button>
+                    </div>
+                </div>
+                <div class="product-card__info">
+                    <h3 class="product-name">{{ prod.name }}</h3>
+                    <p class="product-price">{{ prod.price | currency }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="view-all">
+            <p-button label="View All Products" routerLink="/products" styleClass="p-button-outlined p-button-rounded"></p-button>
+        </div>
+    </section>
+
+    <!-- Value Props -->
+    <section class="value-props section-padding">
+        <div class="prop-grid">
+            <div class="prop-item">
+                <i class="pi pi-truck"></i>
+                <div>
+                    <h4>Free Shipping</h4>
+                    <p>On all orders over $100</p>
+                </div>
+            </div>
+            <div class="prop-item">
+                <i class="pi pi-sync"></i>
+                <div>
+                    <h4>Easy Returns</h4>
+                    <p>30-day money back guarantee</p>
+                </div>
+            </div>
+            <div class="prop-item">
+                <i class="pi pi-shield"></i>
+                <div>
+                    <h4>Secure Payment</h4>
+                    <p>100% secure payment processing</p>
+                </div>
+            </div>
+            <div class="prop-item">
+                <i class="pi pi-headphones"></i>
+                <div>
+                    <h4>24/7 Support</h4>
+                    <p>Dedicated support team</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

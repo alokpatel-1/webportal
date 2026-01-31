@@ -48,7 +48,7 @@
         </small>
     </div>
 
-    <button pButton type="submit" label="Create Account" icon="pi pi-arrow-right" iconPos="right" class="submit-btn"></button>
+    <p-button label="Create Account" styleClass="submit-btn" [loading]="isLoading" (onClick)="onSubmit()" [disabled]="signupForm.invalid || isLoading"></p-button>
 
     <div class="auth-footer">
         Already have an account? <a (click)="switchToLogin.emit()" class="link-highlight">Sign In</a>
