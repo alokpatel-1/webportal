@@ -1,0 +1,17 @@
+<div class="page-header">
+  @if (breadcrumbs.length) {
+    <nav class="page-header__breadcrumb">
+      @for (crumb of breadcrumbs; track crumb.label; let last = $last) {
+        @if (crumb.route && !last) {
+          <a [routerLink]="crumb.route" class="page-header__crumb">{{ crumb.label }}</a>
+          <span class="page-header__separator">/</span>
+        } @else {
+          <span class="page-header__crumb page-header__crumb--current">{{ crumb.label }}</span>
+        }
+      }
+    </nav>
+  }
+  @if (title) {
+    <h1 class="page-header__title">{{ title }}</h1>
+  }
+</div>

@@ -1,0 +1,41 @@
+:host {
+  --header-text: #374151;
+  --header-muted: #6b7280;
+  --header-accent: #7c3aed;
+}
+
+.page-header {
+  margin-bottom: 1.5rem;
+}
+
+.page-header__breadcrumb {
+  font-size: 0.875rem;
+  color: var(--header-muted);
+  margin-bottom: 0.5rem;
+}
+
+.page-header__crumb {
+  color: var(--header-muted);
+  text-decoration: none;
+
+  &:hover:not(.page-header__crumb--current) {
+    color: var(--header-accent);
+  }
+}
+
+.page-header__crumb--current {
+  color: var(--header-text);
+  font-weight: 500;
+}
+
+.page-header__separator {
+  margin: 0 0.375rem;
+  color: var(--header-muted);
+}
+
+.page-header__title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--header-text);
+  margin: 0;
+}

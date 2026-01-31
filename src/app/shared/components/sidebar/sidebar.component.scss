@@ -1,0 +1,52 @@
+:host {
+  --sidebar-bg: #f9fafb;
+  --sidebar-border: #e5e7eb;
+  --sidebar-text: #374151;
+  --sidebar-active: #7c3aed;
+}
+
+.sidebar {
+  width: 240px;
+  min-height: 100%;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  padding: 1rem 0;
+  flex-shrink: 0;
+}
+
+.sidebar__title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--sidebar-text);
+  padding: 0 1rem 0.75rem;
+  margin: 0;
+  border-bottom: 1px solid var(--sidebar-border);
+}
+
+.sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0;
+}
+
+.sidebar__link {
+  display: block;
+  padding: 0.5rem 1rem;
+  color: var(--sidebar-text);
+  text-decoration: none;
+  font-size: 0.9375rem;
+  transition: background 0.2s ease, color 0.2s ease;
+
+  &:hover {
+    background: rgba(124, 58, 237, 0.08);
+    color: var(--sidebar-active);
+  }
+}
+
+.sidebar__link--active {
+  background: rgba(124, 58, 237, 0.12);
+  color: var(--sidebar-active);
+  font-weight: 500;
+}
