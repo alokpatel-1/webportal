@@ -1,7 +1,7 @@
 :host {
-  --footer-text: #6b7280;
-  --footer-accent: #7c3aed;
-  --footer-dark: #111827;
+  --footer-text: var(--color-text-secondary);
+  --footer-accent: var(--color-primary);
+  --footer-dark: var(--color-text-primary);
 }
 
 .footer {

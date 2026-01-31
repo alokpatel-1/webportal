@@ -7,11 +7,11 @@
 .user-dashboard__title {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #111827;
+  color: var(--color-text-primary);
   margin: 0 0 1rem;
 }
 
 .placeholder {
-  color: #6b7280;
+  color: var(--color-text-secondary);
   margin: 0;
 }

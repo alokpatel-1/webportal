@@ -3,10 +3,9 @@
   <!-- Logo Area -->
   <div class="sidebar__header">
     <div class="logo">
-      <span class="logo__text" *ngIf="!collapsed">
-        <span class="text-teal-600 font-bold">Open</span><span class="text-navy-900 font-semibold">Mart</span>
+      <span class="logo__text">
+        <span class="text-brand-primary font-bold">Open</span><span class="text-brand-secondary font-semibold">Mart</span>
       </span>
-      <span class="logo__icon" *ngIf="collapsed">O</span>
     </div>
     <button class="toggle-btn" (click)="toggleCollapse()">
       <i class="pi" [class.pi-angle-left]="!collapsed" [class.pi-angle-right]="collapsed"></i>
@@ -15,7 +14,7 @@
 
   <!-- Organization Switcher -->
   <div class="sidebar__org-switcher" *ngIf="organizations.length">
-    <div class="org-header" (click)="toggleOrgSwitcher()" [class.active]="showOrgSwitcher">
+    <div class="org-header" (click)="toggleOrgSwitcher($event)" [class.active]="showOrgSwitcher">
       <div class="org-avatar bg-purple-600">
         {{ organizations[0].initial }}
       </div>

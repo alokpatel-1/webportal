@@ -33,7 +33,7 @@
 .clear-btn {
     background: none;
     border: none;
-    color: #7c3aed;
+    color: var(--color-primary);
     font-size: 0.875rem;
     font-weight: 500;
     cursor: pointer;
@@ -93,9 +93,8 @@
         transition: all 0.2s;
 
         &.p-highlight {
-            border-color: #7c3aed;
-            /* Brand purple */
-            background: #7c3aed;
+            border-color: var(--color-primary);
+            background: var(--color-primary);
 
             .p-checkbox-icon {
                 color: #ffffff;
@@ -105,7 +104,7 @@
         }
 
         &:hover {
-            border-color: #7c3aed;
+            border-color: var(--color-primary);
         }
     }
 }

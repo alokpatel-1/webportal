@@ -1,9 +1,9 @@
 :host {
-  --nav-text: #374151;
-  --logo-purple: #7c3aed;
-  --logo-dark: #111827;
-  --demo-gradient-start: #8b5cf6;
-  --demo-gradient-end: #6d28d9;
+  --nav-text: var(--color-text-secondary);
+  --logo-purple: var(--color-primary);
+  --logo-dark: var(--color-text-primary);
+  --demo-gradient-start: var(--color-primary);
+  --demo-gradient-end: var(--color-primary-active);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
@@ -13,7 +13,7 @@
 .top-bar {
   background: #fff;
   border-bottom: 1px solid #e5e7eb;
-  padding: 0.75rem 1.5rem;
+  padding: 0.25rem 1.5rem;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -36,10 +36,10 @@
 }
 
 .logo__brand {
-  font-size: 1.5rem;
+  font-size: 1.35rem;
   font-weight: 600;
   letter-spacing: -0.02em;
-  line-height: 1.2;
+  line-height: 1;
 }
 
 .logo__tagline {
@@ -71,7 +71,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.03em;
-  padding: 1.5rem 0;
+  padding: 0.75rem 0;
   /* Increase hit area */
   border-bottom: 3px solid transparent;
   transition: all 0.2s ease;
@@ -208,8 +208,8 @@
 }
 
 .user-avatar {
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.25rem;
+  height: 2.25rem;
   border-radius: 50%;
   background-color: #f3f4f6;
   color: #4b5563;

@@ -2,7 +2,7 @@
   <div class="top-bar__inner">
     <a href="/" class="logo">
       <span class="logo__brand">
-        <span class="text-teal-600 font-bold">Open</span><span class="text-slate-900 font-semibold">Mart</span>
+        <span class="text-brand-primary font-bold">Open</span><span class="text-brand-secondary font-semibold">Mart</span>
       </span>
     </a>
 
@@ -42,7 +42,7 @@
 
       <!-- User Menu -->
       <div class="user-menu-container">
-        <button class="user-avatar-btn" (click)="toggleUserMenu()">
+        <button class="user-avatar-btn" (click)="toggleUserMenu($event)">
           <div class="user-avatar">
             <i class="pi pi-user"></i>
           </div>

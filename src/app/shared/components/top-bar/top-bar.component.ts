@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AuthModalComponent, AuthMode } from '../auth-modal/auth-modal.component';
@@ -13,6 +13,15 @@ import { AuthModalComponent, AuthMode } from '../auth-modal/auth-modal.component
 export class TopBarComponent {
   showUserMenu = false;
 
+  constructor(private eRef: ElementRef) { }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event) {
+    if (!this.eRef.nativeElement.contains(event.target)) {
+      this.showUserMenu = false;
+    }
+  }
+
   userMenuItems = [
     { label: 'Profile', icon: 'pi pi-user', route: '/user/profile' },
     { label: 'Addresses', icon: 'pi pi-map-marker', route: '/user/addresses' },
@@ -21,7 +30,8 @@ export class TopBarComponent {
     { label: 'Coupons', icon: 'pi pi-ticket', route: '/user/coupons' }
   ];
 
-  toggleUserMenu() {
+  toggleUserMenu(event: Event) {
+    event.stopPropagation();
     this.showUserMenu = !this.showUserMenu;
   }
 

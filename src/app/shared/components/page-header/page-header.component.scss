@@ -1,7 +1,7 @@
 :host {
-  --header-text: #374151;
-  --header-muted: #6b7280;
-  --header-accent: #7c3aed;
+  --header-text: var(--color-text-primary);
+  --header-muted: var(--color-text-secondary);
+  --header-accent: var(--color-primary);
 }
 
 .page-header {

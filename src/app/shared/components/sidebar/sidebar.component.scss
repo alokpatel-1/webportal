@@ -29,7 +29,12 @@
     }
 
     .logo__text {
-      display: none;
+      // display: flex;
+      // flex-direction: column;
+      align-items: center;
+      font-size: 0.88rem;
+      line-height: 1;
+      // gap: 2px;
     }
 
     .sidebar__org-switcher {
@@ -71,7 +76,7 @@
       right: -12px;
       left: auto;
       transform: none;
-      top: 2rem;
+      top: 2.5rem;
     }
   }
 }
@@ -81,7 +86,7 @@
   padding: 1.5rem 1.5rem 1rem;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   position: relative;
 }
 
@@ -95,7 +100,7 @@
 .logo__icon {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #0d9488; // teal-600
+  color: var(--color-primary);
 }
 
 .toggle-btn {
@@ -116,8 +121,8 @@
   z-index: 10;
 
   &:hover {
-    background-color: #f9fafb;
-    color: #7c3aed;
+    background-color: var(--color-bg-muted);
+    color: var(--color-primary);
   }
 
   .pi {
@@ -149,8 +154,8 @@
   }
 
   &.active {
-    border-color: #7f56d9;
-    box-shadow: 0 0 0 4px #f4ebff;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 4px var(--color-accent-soft);
   }
 }
 
@@ -262,14 +267,14 @@
   }
 
   &.create-org {
-    color: #7f56d9;
+    color: var(--color-primary);
 
     i {
-      color: #7f56d9;
+      color: var(--color-primary);
     }
 
     &:hover {
-      background-color: #f9f5ff;
+      background-color: var(--color-accent-soft);
     }
   }
 }
@@ -343,13 +348,11 @@
   }
 
   &.active {
-    background-color: #f9f5ff;
-    /* light purple bg */
-    color: #6941c6;
+    background-color: var(--color-accent-soft);
+    color: var(--color-primary-active);
 
-    /* dark purple text */
     .nav-icon {
-      color: #6941c6;
+      color: var(--color-primary-active);
     }
   }
 }
@@ -428,59 +431,69 @@
 /* PrimeNG Menu Customization */
 ::ng-deep .user-menu {
   margin-top: 0.5rem !important;
-  border-radius: 0.75rem !important;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05),
-    0 0 0 1px rgba(0, 0, 0, 0.05) !important;
-  border: 1px solid #e5e7eb !important;
-  padding: 0.5rem !important;
-  min-width: 200px !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08), 0 0 1px rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid #f2f4f7 !important;
+  padding: 4px !important;
+  min-width: 220px !important;
+  background: #ffffff !important;
+  transform: translateX(20px) !important;
 
   .p-menuitem-link {
-    padding: 0.875rem 1rem !important;
-    border-radius: 0.5rem !important;
-    transition: all 0.15s ease !important;
-    font-size: 0.9375rem !important;
+    padding: 10px 12px !important;
+    border-radius: 8px !important;
+    transition: all 0.2s ease !important;
+    font-size: 14px !important;
     font-weight: 500 !important;
-    color: #1f2937 !important;
+    color: #344054 !important;
+    background: transparent !important;
 
     .p-menuitem-icon {
-      font-size: 1.125rem !important;
-      margin-right: 0.875rem !important;
-      color: #6b7280 !important;
+      font-size: 1rem !important;
+      margin-right: 12px !important;
+      color: #667085 !important;
+    }
+
+    .p-menuitem-text {
+      color: #344054 !important;
     }
 
     &:hover {
-      background: linear-gradient(to right, #f9fafb, #f3f4f6) !important;
-      color: #111827 !important;
+      background: #f9fafb !important;
+
+      .p-menuitem-text {
+        color: #101828 !important;
+      }
 
       .p-menuitem-icon {
-        color: #4b5563 !important;
+        color: #475467 !important;
       }
     }
+  }
 
-    &.logout-item {
-      color: #dc2626 !important;
+  // Target the logout item (styleClass is 'logout-item')
+  .p-menuitem.logout-item {
+    .p-menuitem-text {
+      color: #df1c1c !important;
+    }
 
+    .p-menuitem-icon {
+      color: #df1c1c !important;
+    }
+
+    .p-menuitem-link:hover {
+      background: #fff1f1 !important;
+
+      .p-menuitem-text,
       .p-menuitem-icon {
-        color: #dc2626 !important;
-      }
-
-      &:hover {
-        background: linear-gradient(to right, #fef2f2, #fee2e2) !important;
-        color: #b91c1c !important;
-
-        .p-menuitem-icon {
-          color: #b91c1c !important;
-        }
+        color: #c91818 !important;
       }
     }
   }
 
   .p-menuitem-separator {
-    margin: 0.5rem 0 !important;
-    border-top: 1px solid transparent !important;
-    background: linear-gradient(to right, transparent, #e5e7eb, transparent) !important;
-    height: 1px !important;
+    margin: 4px 0 !important;
+    border-top: 1px solid #f2f4f7 !important;
+    height: 0 !important;
   }
 }

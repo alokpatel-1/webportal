@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChild, HostListener, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Menu, MenuModule } from 'primeng/menu';
@@ -47,6 +47,18 @@ export class SidebarComponent {
 
   @ViewChild('userMenu') userMenu!: Menu;
 
+  constructor(private eRef: ElementRef) { }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event) {
+    const target = event.target as HTMLElement;
+    const orgSwitcher = this.eRef.nativeElement.querySelector('.sidebar__org-switcher');
+
+    if (orgSwitcher && !orgSwitcher.contains(target)) {
+      this.showOrgSwitcher = false;
+    }
+  }
+
   userMenuItems: MenuItem[] = [];
 
   ngOnInit() {
@@ -61,10 +73,15 @@ export class SidebarComponent {
         command: () => this.onProfile()
       },
       {
+        label: 'Settings',
+        icon: 'pi pi-cog',
+        command: () => console.log('Navigate to settings')
+      },
+      {
         separator: true
       },
       {
-        label: 'Logout',
+        label: 'Sign out',
         icon: 'pi pi-sign-out',
         command: () => this.onLogout(),
         styleClass: 'logout-item'
@@ -92,13 +109,15 @@ export class SidebarComponent {
     }
   }
 
-  toggleOrgSwitcher() {
+  toggleOrgSwitcher(event: Event) {
+    event.stopPropagation();
     if (!this.collapsed) {
       this.showOrgSwitcher = !this.showOrgSwitcher;
     }
   }
 
   toggleUserMenu(event: Event) {
+    event.stopPropagation();
     if (!this.collapsed) {
       this.userMenu.toggle(event);
       this.showOrgSwitcher = false; // Close org switcher if user menu opens
