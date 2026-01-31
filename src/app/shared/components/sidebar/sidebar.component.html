@@ -14,7 +14,7 @@
 
   <!-- Organization Switcher -->
   <div class="sidebar__org-switcher" *ngIf="organizations.length">
-    <div class="org-header" (click)="toggleOrgSwitcher($event)" [class.active]="showOrgSwitcher">
+    <div class="org-header" (click)="toggleOrgSwitcher($event)" [class.active]="showOrgSwitcher" [pTooltip]="organizations[0].name" tooltipPosition="right" [tooltipDisabled]="!collapsed">
       <div class="org-avatar bg-purple-600">
         {{ organizations[0].initial }}
       </div>
@@ -83,7 +83,7 @@
         <div class="section-divider" *ngIf="collapsed && section.title"></div>
 
         <nav class="nav-list">
-          <a *ngFor="let item of section.items" [routerLink]="item.route" routerLinkActive="active" class="nav-item" [title]="collapsed ? item.label : ''">
+          <a *ngFor="let item of section.items" [routerLink]="item.route" routerLinkActive="active" class="nav-item" [pTooltip]="item.label" tooltipPosition="right" [tooltipDisabled]="!collapsed">
             <i [class]="item.icon" class="nav-icon"></i>
             <span class="nav-label" *ngIf="!collapsed">{{ item.label }}</span>
           </a>
@@ -94,7 +94,7 @@
 
   <!-- User Profile with Menu -->
   <div class="sidebar__footer" *ngIf="user">
-    <div class="user-section" (click)="toggleUserMenu($event)">
+    <div class="user-section" (click)="toggleUserMenu($event)" [pTooltip]="user.name" tooltipPosition="right" [tooltipDisabled]="!collapsed">
       <div class="user-avatar" [ngClass]="user.bgColorClass">
         {{ user.initial }}
       </div>
