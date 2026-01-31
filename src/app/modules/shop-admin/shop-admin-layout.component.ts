@@ -3,7 +3,7 @@ import { RouterModule } from '@angular/router';
 
 import { TopBarComponent } from '../../shared/components/top-bar/top-bar.component';
 import { FooterComponent } from '../../shared/components/footer/footer.component';
-import { SidebarComponent, SidebarItem } from '../../shared/components/sidebar/sidebar.component';
+import { SidebarComponent } from '../../shared/components/sidebar/sidebar.component';
 import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
 
 @Component({
@@ -14,7 +14,25 @@ import { PageHeaderComponent } from '../../shared/components/page-header/page-he
   styleUrl: './shop-admin-layout.component.scss'
 })
 export class ShopAdminLayoutComponent {
-  sidebarItems: SidebarItem[] = [
-    { label: 'Dashboard', route: '/shop-admin' }
+  organizations = [
+    { name: 'Shop HQ', role: 'Admin', initial: 'H', bgColorClass: 'bg-orange-600' }
   ];
+
+  sections = [
+    {
+      title: 'Management',
+      items: [
+        { label: 'Dashboard', icon: 'pi pi-chart-line', route: '/shop-admin' },
+        { label: 'Sellers', icon: 'pi pi-users', route: '/shop-admin/sellers' },
+        { label: 'Approvals', icon: 'pi pi-check-square', route: '/shop-admin/approvals' }
+      ]
+    }
+  ];
+
+  user = {
+    name: 'Admin User',
+    email: 'admin@shop.com',
+    initial: 'A',
+    bgColorClass: 'bg-orange-500'
+  };
 }

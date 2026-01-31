@@ -1,5 +1,9 @@
-<app-top-bar />
-<main class="layout-main">
-  <router-outlet />
-</main>
-<app-footer />
+<div class="flex flex-col h-screen">
+  <app-top-bar />
+  <div class="flex flex-1 overflow-hidden">
+    <app-product-filter [sections]="filterSections" (filterChange)="onFilterChange($event)"></app-product-filter>
+    <main class="flex-1 overflow-auto bg-gray-50 p-6">
+      <router-outlet />
+    </main>
+  </div>
+</div>

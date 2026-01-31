@@ -1,0 +1,171 @@
+:host {
+    display: block;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    z-index: 90;
+}
+
+.filter-sidebar {
+    width: 16rem;
+    height: 100%;
+    background-color: #ffffff;
+    border-right: 1px solid #eaecf0;
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #f2f4f7;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.filter-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #111827;
+    margin: 0;
+}
+
+.clear-btn {
+    background: none;
+    border: none;
+    color: #7c3aed;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.filter-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem 1.5rem;
+}
+
+.filter-section {
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #f9fafb;
+    padding-bottom: 1rem;
+
+    &:last-child {
+        border-bottom: none;
+    }
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    margin-bottom: 0.75rem;
+
+    &:hover .section-label {
+        color: #111827;
+    }
+}
+
+.section-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+/* Custom Checkbox Styling to improve visibility */
+:host ::ng-deep .p-checkbox {
+    width: 1.25rem;
+    height: 1.25rem;
+
+    .p-checkbox-box {
+        width: 1.25rem;
+        height: 1.25rem;
+        border: 2px solid #d1d5db;
+        /* Gray-300 */
+        border-radius: 0.25rem;
+        background: #fff;
+        transition: all 0.2s;
+
+        &.p-highlight {
+            border-color: #7c3aed;
+            /* Brand purple */
+            background: #7c3aed;
+
+            .p-checkbox-icon {
+                color: #ffffff;
+                font-weight: bold;
+                font-size: 0.875rem;
+            }
+        }
+
+        &:hover {
+            border-color: #7c3aed;
+        }
+    }
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+    /* Increased spacing */
+    cursor: pointer;
+
+    &:hover {
+        ::ng-deep .p-checkbox-label {
+            color: #111827;
+        }
+    }
+
+    ::ng-deep .p-checkbox-label {
+        margin-left: 0.75rem;
+        color: #4b5563;
+        font-size: 0.9375rem;
+        /* Slightly larger text */
+        cursor: pointer;
+    }
+}
+
+.count-badge {
+    font-size: 0.75rem;
+    color: #9ca3af;
+}
+
+.range-container {
+    padding: 0.5rem 0.25rem;
+}
+
+.range-inputs {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: #4b5563;
+    font-weight: 500;
+}
+
+/* Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #f2f4f7;
+    border-radius: 2px;
+}
+
+.custom-scrollbar:hover::-webkit-scrollbar-thumb {
+    background: #d0d5dd;
+}

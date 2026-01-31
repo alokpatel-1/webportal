@@ -31,7 +31,39 @@
         </svg>
       </button>
       <a href="#" class="top-bar__login">Login</a>
-      <a href="#" class="btn-demo">Request Demo</a>
+
+      <!-- User Menu -->
+      <div class="user-menu-container">
+        <button class="user-avatar-btn" (click)="toggleUserMenu()">
+          <div class="user-avatar">
+            <i class="pi pi-user"></i>
+          </div>
+        </button>
+
+        <div class="user-dropdown" *ngIf="showUserMenu">
+          <div class="user-dropdown__header">
+            <span class="user-name">John Doe</span>
+            <span class="user-email">john&#64;example.com</span>
+          </div>
+          <ul class="user-dropdown__list">
+            <li *ngFor="let item of userMenuItems">
+              <a [routerLink]="item.route" class="user-dropdown__link">
+                <i [class]="item.icon"></i>
+                <span>{{ item.label }}</span>
+              </a>
+            </li>
+            <li class="user-dropdown__divider"></li>
+            <li>
+              <a href="#" class="user-dropdown__link delete-action">
+                <i class="pi pi-sign-out"></i>
+                <span>Logout</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- End User Menu -->
+
     </div>
   </div>
 </header>

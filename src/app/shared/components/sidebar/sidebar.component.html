@@ -1,10 +1,62 @@
-<aside class="sidebar">
-  <h2 class="sidebar__title">{{ title }}</h2>
-  <nav class="sidebar__nav">
-    @for (item of items; track item.route) {
-      <a [routerLink]="item.route" routerLinkActive="sidebar__link--active" class="sidebar__link">
-        {{ item.label }}
-      </a>
-    }
-  </nav>
+<aside class="sidebar" [class.collapsed]="collapsed">
+
+  <!-- Logo Area -->
+  <div class="sidebar__header">
+    <div class="logo">
+      <span class="logo__text" *ngIf="!collapsed">
+        <span class="text-purple-600">rep</span>twin.ai
+      </span>
+      <span class="logo__icon" *ngIf="collapsed">r</span>
+    </div>
+    <button class="toggle-btn" (click)="toggleCollapse()">
+      <i class="pi" [class.pi-angle-left]="!collapsed" [class.pi-angle-right]="collapsed"></i>
+    </button>
+  </div>
+
+  <!-- Organizations -->
+  <div class="sidebar__orgs" *ngIf="organizations.length">
+    <div *ngFor="let org of organizations" class="org-item">
+      <div class="org-avatar" [ngClass]="org.bgColorClass">
+        {{ org.initial }}
+      </div>
+      <div class="org-info" *ngIf="!collapsed">
+        <div class="org-name">{{ org.name }}</div>
+        <div class="org-role">
+          <i class="pi pi-crown text-[10px] mr-1" *ngIf="org.role === 'Owner'"></i>
+          <i class="pi pi-building text-[10px] mr-1" *ngIf="org.role === 'Brand'"></i>
+          {{ org.role }}
+        </div>
+      </div>
+      <i class="pi pi-angle-down ml-auto text-gray-400 text-xs" *ngIf="!collapsed"></i>
+    </div>
+  </div>
+
+  <!-- Navigation Sections -->
+  <div class="sidebar__content custom-scrollbar">
+    <ng-container *ngFor="let section of sections">
+      <div class="nav-section">
+        <div class="section-title" *ngIf="!collapsed && section.title">{{ section.title }}</div>
+        <div class="section-divider" *ngIf="collapsed && section.title"></div>
+
+        <nav class="nav-list">
+          <a *ngFor="let item of section.items" [routerLink]="item.route" routerLinkActive="active" class="nav-item" [title]="collapsed ? item.label : ''">
+            <i [class]="item.icon" class="nav-icon"></i>
+            <span class="nav-label" *ngIf="!collapsed">{{ item.label }}</span>
+          </a>
+        </nav>
+      </div>
+    </ng-container>
+  </div>
+
+  <!-- User Profile -->
+  <div class="sidebar__footer" *ngIf="user">
+    <div class="user-avatar" [ngClass]="user.bgColorClass">
+      {{ user.initial }}
+    </div>
+    <div class="user-info" *ngIf="!collapsed">
+      <div class="user-name">{{ user.name }}</div>
+      <div class="user-email" [title]="user.email">{{ user.email }}</div>
+    </div>
+  </div>
+
 </aside>

@@ -1,0 +1,39 @@
+<aside class="filter-sidebar">
+    <div class="filter-header">
+        <h3 class="filter-title">Filters</h3>
+        <button class="clear-btn" (click)="selectedValues = {}; onFilterChange()">Clear All</button>
+    </div>
+
+    <div class="filter-content custom-scrollbar">
+        <div *ngFor="let section of sections" class="filter-section" [class.collapsed]="section.collapsed">
+            <div class="section-header" (click)="toggleSection(section)">
+                <span class="section-label">{{ section.label }}</span>
+                <i class="pi" [class.pi-angle-down]="!section.collapsed" [class.pi-angle-right]="section.collapsed"></i>
+            </div>
+
+            <div class="section-body" *ngIf="!section.collapsed">
+                <!-- Checkbox List -->
+                <ng-container *ngIf="section.type === 'checkbox'">
+                    <div *ngFor="let option of section.options" class="checkbox-item">
+                        <p-checkbox name="{{section.id}}" [value]="option.value" [(ngModel)]="selectedValues[section.id]" (onChange)="onFilterChange()" [label]="option.label" styleClass="filter-checkbox"></p-checkbox>
+                        <span class="count-badge" *ngIf="option.count">({{ option.count }})</span>
+                    </div>
+                </ng-container>
+
+                <!-- Range Slider -->
+                <ng-container *ngIf="section.type === 'range' && section.rangeConfig">
+                    <div class="range-container">
+                        <p-slider [(ngModel)]="selectedValues[section.id]" [min]="section.rangeConfig.min" [max]="section.rangeConfig.max" [range]="true" (onSlideEnd)="onFilterChange()">
+                        </p-slider>
+                        <div class="range-inputs">
+                            <span class="range-val">{{ selectedValues[section.id]?.[0] || section.rangeConfig.min }}</span>
+                            <span class="range-sep">-</span>
+                            <span class="range-val">{{ selectedValues[section.id]?.[1] || section.rangeConfig.max }}</span>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+
+        </div>
+    </div>
+</aside>
