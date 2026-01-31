@@ -7,12 +7,12 @@
     </a>
 
     <nav class="nav">
-      <div class="nav__item" *ngFor="let menu of megaMenuItems" (mouseenter)="activeMegaMenu = menu.id" (mouseleave)="activeMegaMenu = null">
-        <a [routerLink]="[]" class="nav__link nav__link--mega" [class.active]="activeMegaMenu === menu.id">
+      <div class="nav__item" *ngFor="let menu of megaMenuItems" (mouseenter)="activeMegaMenu.set(menu.id)" (mouseleave)="activeMegaMenu.set(null)">
+        <a [routerLink]="[]" class="nav__link nav__link--mega" [class.active]="activeMegaMenu() === menu.id">
           {{ menu.label }}
         </a>
 
-        <div class="mega-menu" *ngIf="activeMegaMenu === menu.id">
+        <div class="mega-menu" *ngIf="activeMegaMenu() === menu.id">
           <div class="mega-menu__inner">
             <div class="mega-menu__column" *ngFor="let col of menu.columns">
               <h3 class="mega-menu__title">{{ col.title }}</h3>
@@ -38,20 +38,22 @@
           <path d="M6 9l6 6 6-6" />
         </svg>
       </button>
-      <a (click)="openAuthModal()" class="top-bar__login" style="cursor: pointer;">Login</a>
+      <a *ngIf="!authService.currentUser()" (click)="openAuthModal()" class="top-bar__login" style="cursor: pointer;">Login</a>
+      <!-- <a *ngIf="!authService.currentUser()" (click)="authMode.set(AuthMode.Signup); showAuthModal.set(true)" class="top-bar__login ml-4" style="cursor: pointer;">Signup</a> -->
 
       <!-- User Menu -->
-      <div class="user-menu-container">
+      <div class="user-menu-container" *ngIf="authService.currentUser() as user">
         <button class="user-avatar-btn" (click)="toggleUserMenu($event)">
           <div class="user-avatar">
-            <i class="pi pi-user"></i>
+            <span *ngIf="user.name">{{ user.name.charAt(0).toUpperCase() }}</span>
+            <i *ngIf="!user.name" class="pi pi-user"></i>
           </div>
         </button>
 
-        <div class="user-dropdown" *ngIf="showUserMenu">
+        <div class="user-dropdown" *ngIf="showUserMenu()">
           <div class="user-dropdown__header">
-            <span class="user-name">John Doe</span>
-            <span class="user-email">john&#64;example.com</span>
+            <span class="user-name">{{ user.name }}</span>
+            <span class="user-email">{{ user.email }}</span>
           </div>
           <ul class="user-dropdown__list">
             <li *ngFor="let item of userMenuItems">
@@ -62,7 +64,7 @@
             </li>
             <li class="user-dropdown__divider"></li>
             <li>
-              <a href="#" class="user-dropdown__link delete-action">
+              <a (click)="logout($event)" class="user-dropdown__link delete-action" style="cursor: pointer;">
                 <i class="pi pi-sign-out"></i>
                 <span>Logout</span>
               </a>

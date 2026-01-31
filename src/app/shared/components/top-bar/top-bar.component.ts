@@ -1,7 +1,9 @@
-import { Component, HostListener, ElementRef } from '@angular/core';
+import { Component, HostListener, ElementRef, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { AuthModalComponent, AuthMode } from '../auth-modal/auth-modal.component';
+import { AuthModalComponent } from '../auth-modal/auth-modal.component';
+import { AuthMode } from '../../../core/models/auth.model';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-top-bar',
@@ -11,14 +13,15 @@ import { AuthModalComponent, AuthMode } from '../auth-modal/auth-modal.component
   styleUrl: './top-bar.component.scss'
 })
 export class TopBarComponent {
-  showUserMenu = false;
+  private eRef = inject(ElementRef);
+  protected authService = inject(AuthService);
 
-  constructor(private eRef: ElementRef) { }
+  showUserMenu = signal<boolean>(false);
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: Event) {
     if (!this.eRef.nativeElement.contains(event.target)) {
-      this.showUserMenu = false;
+      this.showUserMenu.set(false);
     }
   }
 
@@ -32,19 +35,26 @@ export class TopBarComponent {
 
   toggleUserMenu(event: Event) {
     event.stopPropagation();
-    this.showUserMenu = !this.showUserMenu;
+    this.showUserMenu.update(v => !v);
+  }
+
+  logout(event: Event) {
+    event.preventDefault();
+    this.authService.logout();
+    this.showUserMenu.set(false);
   }
 
   // Auth Modal State
-  showAuthModal = false;
-  authMode: AuthMode = AuthMode.Login;
+  readonly AuthMode = AuthMode;
+  showAuthModal = signal(false);
+  authMode = signal<AuthMode>(AuthMode.Login);
 
   openAuthModal() {
-    this.authMode = AuthMode.Login;
-    this.showAuthModal = true;
+    this.authMode.set(AuthMode.Login);
+    this.showAuthModal.set(true);
   }
 
-  activeMegaMenu: string | null = null;
+  activeMegaMenu = signal<string | null>(null);
 
   megaMenuItems = [
     {

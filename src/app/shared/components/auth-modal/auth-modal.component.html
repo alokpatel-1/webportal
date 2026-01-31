@@ -1,4 +1,4 @@
-<div class="auth-overlay" *ngIf="visible">
+<div class="auth-overlay" *ngIf="visible()">
     <div class="auth-box" (click)="$event.stopPropagation()">
         <button class="close-btn" (click)="close()">
             <i class="pi pi-times"></i>
@@ -24,18 +24,30 @@
             </div>
 
             <!-- Messages -->
-            <div class="success-message" *ngIf="successMessage()">
-                <i class="pi pi-check-circle text-2xl mb-2"></i>
+            <div class="success-message" *ngIf="successMessage() && mode() !== AuthMode.Login">
+                <div class="success-icon">
+                    <i class="pi pi-check"></i>
+                </div>
                 <p>{{ successMessage() }}</p>
             </div>
 
+            <div class="success-alert" *ngIf="successMessage() && mode() === AuthMode.Login">
+                <i class="pi pi-check-circle"></i>
+                <span>{{ successMessage() }}</span>
+            </div>
+
             <div class="error-message" *ngIf="errorMessage()">
-                <i class="pi pi-exclamation-circle mr-2"></i>
-                <span>{{ errorMessage() }}</span>
+                <i class="pi pi-info-circle"></i>
+                <div class="error-content">
+                    <span>{{ errorMessage() }}</span>
+                    <button *ngIf="errorCode() === AuthCode.EMAIL_NOT_VERIFIED && lastAttemptedEmail()" class="resend-link" (click)="resendEmail()">
+                        Resend email
+                    </button>
+                </div>
             </div>
 
             <!-- Forms -->
-            <ng-container *ngIf="!successMessage()">
+            <ng-container *ngIf="!successMessage() || mode() === AuthMode.Login">
                 <!-- Login Form Component -->
                 <app-login-form *ngIf="mode() === AuthMode.Login" (submitLogin)="onLoginSubmit($event)" (switchToSignup)="switchMode(AuthMode.Signup)" (switchToForgotPassword)="switchMode(AuthMode.ForgotPassword)">
                 </app-login-form>

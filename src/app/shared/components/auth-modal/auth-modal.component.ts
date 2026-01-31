@@ -1,16 +1,13 @@
-import { Component, EventEmitter, Input, Output, signal, inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output, signal, inject, DestroyRef, model } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { SignupFormComponent } from './signup-form/signup-form.component';
 import { ForgotPasswordFormComponent } from './forgot-password-form/forgot-password-form.component';
-import { AuthService, RegisterPayload } from '../../../core/services/auth.service';
+import { AuthService } from '../../../core/services/auth.service';
+import { AuthMode, RegisterPayload, LoginPayload, AuthCode } from '../../../core/models/auth.model';
 import { finalize } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-export enum AuthMode {
-    Login = 'login',
-    Signup = 'signup',
-    ForgotPassword = 'forgot-password'
-}
 
 @Component({
     selector: 'app-auth-modal',
@@ -20,23 +17,25 @@ export enum AuthMode {
     styleUrl: './auth-modal.component.scss'
 })
 export class AuthModalComponent {
-    @Input() visible = false;
-    @Output() visibleChange = new EventEmitter<boolean>();
+    visible = model<boolean>(false);
 
     private authService = inject(AuthService);
+    private destroyRef = inject(DestroyRef);
 
     // Expose enum to template
     readonly AuthMode = AuthMode;
+    readonly AuthCode = AuthCode;
 
     // Signals for state
     mode = signal<AuthMode>(AuthMode.Login);
     isLoading = signal<boolean>(false);
     successMessage = signal<string | null>(null);
     errorMessage = signal<string | null>(null);
+    errorCode = signal<AuthCode | null>(null);
+    lastAttemptedEmail = signal<string | null>(null);
 
     close() {
-        this.visible = false;
-        this.visibleChange.emit(false);
+        this.visible.set(false);
         this.resetState();
     }
 
@@ -44,18 +43,44 @@ export class AuthModalComponent {
         this.mode.set(AuthMode.Login);
         this.successMessage.set(null);
         this.errorMessage.set(null);
+        this.errorCode.set(null);
         this.isLoading.set(false);
+        this.lastAttemptedEmail.set(null);
     }
 
     switchMode(newMode: AuthMode) {
         this.mode.set(newMode);
         this.successMessage.set(null);
         this.errorMessage.set(null);
+        this.errorCode.set(null);
     }
 
     // Handle login submission
-    onLoginSubmit(credentials: { email: string; password: string }) {
-        console.log('Logging in...', credentials);
+    onLoginSubmit(credentials: LoginPayload) {
+        this.isLoading.set(true);
+        this.errorMessage.set(null);
+        this.errorCode.set(null);
+        this.successMessage.set(null);
+        this.lastAttemptedEmail.set(credentials.email);
+
+        this.authService.login(credentials)
+            .pipe(
+                takeUntilDestroyed(this.destroyRef),
+                finalize(() => this.isLoading.set(false))
+            )
+            .subscribe({
+                next: (res) => {
+                    this.successMessage.set(res.message);
+                    console.log('Login successful:', res);
+
+                    setTimeout(() => this.close(), 1500);
+                },
+                error: (err) => {
+                    this.errorMessage.set(err.error?.message || 'Login failed. Please check your credentials.');
+                    this.errorCode.set(err.error?.code);
+                    console.error('Login error:', err);
+                }
+            });
     }
 
     // Handle signup submission
@@ -65,12 +90,16 @@ export class AuthModalComponent {
         this.successMessage.set(null);
 
         this.authService.register(data)
-            .pipe(finalize(() => this.isLoading.set(false)))
+            .pipe(
+                takeUntilDestroyed(this.destroyRef),
+                finalize(() => this.isLoading.set(false))
+            )
             .subscribe({
                 next: (res) => {
                     this.successMessage.set(res.message);
+                    this.mode.set(AuthMode.Login);
                     console.log('Signup successful:', res);
-                    // Optionally switch to login or show success screen
+                    setTimeout(() => this.successMessage.set(null), 500000);
                 },
                 error: (err) => {
                     this.errorMessage.set(err.error?.message || 'Registration failed. Please try again.');
@@ -82,5 +111,23 @@ export class AuthModalComponent {
     // Handle forgot password submission
     onForgotPasswordSubmit(data: { email: string }) {
         console.log('Resetting password...', data);
+    }
+
+    resendEmail() {
+        const email = this.lastAttemptedEmail();
+        if (!email) return;
+
+        this.isLoading.set(true);
+        this.authService.resendVerification(email).pipe(
+            finalize(() => this.isLoading.set(false))
+        ).subscribe({
+            next: (res) => {
+                this.successMessage.set(res.message || 'Verification email resent successfully.');
+                this.errorMessage.set(null);
+            },
+            error: (err) => {
+                this.errorMessage.set(err.error?.message || 'Failed to resend verification email.');
+            }
+        });
     }
 }
