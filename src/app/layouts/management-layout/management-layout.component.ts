@@ -85,7 +85,7 @@ export class ManagementLayoutComponent implements OnInit {
         ];
         this.user = {
             name: 'Alok Patel',
-            email: 'alok.patel_demo_4@openmart.com',
+            email: 'alok.patel_demo_4@livo.com',
             initial: 'A',
             bgColorClass: 'bg-purple-600'
         };

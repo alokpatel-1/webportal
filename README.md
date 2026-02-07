@@ -1,4 +1,4 @@
-# Webportal
+# Livo — everything you live for
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.12.
 
