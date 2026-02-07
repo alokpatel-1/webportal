@@ -13,18 +13,18 @@
   </div>
 
   <!-- Organization Switcher -->
-  <div class="sidebar__org-switcher" *ngIf="organizations.length">
-    <div class="org-header" (click)="toggleOrgSwitcher($event)" [class.active]="showOrgSwitcher" [pTooltip]="organizations[0].name" tooltipPosition="right" [tooltipDisabled]="!collapsed">
+  <div class="sidebar__org-switcher" *ngIf="shopsList && activeOrg">
+    <div class="org-header" (click)="toggleOrgSwitcher($event)" [class.active]="showOrgSwitcher" [pTooltip]="activeOrg.name" tooltipPosition="right" [tooltipDisabled]="!collapsed">
       <div class="org-avatar bg-purple-600">
-        {{ organizations[0].initial }}
+        {{ activeOrg.initial }}
       </div>
       <div class="org-info" *ngIf="!collapsed">
         <div class="org-name-wrapper">
-          <span class="org-name">{{ organizations[0].name }}</span>
+          <span class="org-name">{{ activeOrg.name }}</span>
         </div>
         <div class="org-role-wrapper">
           <i class="pi pi-crown text-amber-500 text-[10px] mr-1"></i>
-          <span class="org-role">{{ organizations[0].role }}</span>
+          <span class="org-role">{{ activeOrg.role }}</span>
         </div>
       </div>
       <i class="pi ml-auto text-gray-400 text-xs" [class.pi-angle-down]="!showOrgSwitcher" [class.pi-angle-up]="showOrgSwitcher" *ngIf="!collapsed"></i>
@@ -33,43 +33,43 @@
     <!-- Org Dropdown Panel -->
     <div class="org-switcher-panel" *ngIf="showOrgSwitcher && !collapsed">
       <div class="panel-section">
-        <div class="section-label">YOUR ORGANIZATIONS</div>
-        <div class="org-item active">
-          <div class="org-avatar bg-purple-600">
-            {{ organizations[0].initial }}
+        <div class="section-label">{{ shopsList.sectionLabel }}</div>
+        @for (org of shopsList.allOrgs; track org.name) {
+        <div class="org-item" [class.active]="org.name === activeOrg.name" (click)="activeOrg = org; orgSelected.emit(org); showOrgSwitcher = false">
+          <div class="org-avatar" [ngClass]="org.bgColorClass || 'bg-purple-600'">
+            {{ org.initial }}
           </div>
           <div class="org-info">
             <div class="org-name-wrapper">
-              <span class="org-name">{{ organizations[0].name }}</span>
+              <span class="org-name">{{ org.name }}</span>
             </div>
             <div class="org-role-wrapper">
               <i class="pi pi-crown text-amber-500 text-[10px] mr-1"></i>
-              <span class="org-role">{{ organizations[0].role }}</span>
+              <span class="org-role">{{ org.role }}</span>
             </div>
           </div>
+          @if (org.name === activeOrg.name) {
           <i class="pi pi-check text-purple-600 ml-auto text-sm"></i>
+          }
+        </div>
+        }
+      </div>
+
+      <div class="panel-divider"></div>
+
+      <div class="panel-section">
+        <div class="panel-link" *ngFor="let nav of shopsList.mainActions" (click)="actionClicked.emit(nav.action)">
+          <i [class]="nav.icon"></i>
+          <span>{{ nav.label }}</span>
         </div>
       </div>
 
       <div class="panel-divider"></div>
 
       <div class="panel-section">
-        <div class="panel-link" (click)="onInvite()">
-          <i class="pi pi-users"></i>
-          <span>Manage Members</span>
-        </div>
-        <div class="panel-link">
-          <i class="pi pi-cog"></i>
-          <span>Organization Settings</span>
-        </div>
-      </div>
-
-      <div class="panel-divider"></div>
-
-      <div class="panel-section">
-        <div class="panel-link create-org">
-          <i class="pi pi-plus"></i>
-          <span>Create New Organization</span>
+        <div class="panel-link create-org" (click)="actionClicked.emit(shopsList.footerAction.action)">
+          <i [class]="shopsList.footerAction.icon"></i>
+          <span>{{ shopsList.footerAction.label }}</span>
         </div>
       </div>
     </div>
@@ -77,7 +77,7 @@
 
   <!-- Navigation Sections -->
   <div class="sidebar__content custom-scrollbar">
-    <ng-container *ngFor="let section of sections">
+    <ng-container *ngFor="let section of menuOptions">
       <div class="nav-section">
         <div class="section-title" *ngIf="!collapsed && section.title">{{ section.title }}</div>
         <div class="section-divider" *ngIf="collapsed && section.title"></div>

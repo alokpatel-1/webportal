@@ -1,9 +1,11 @@
-import { Component, Input, Output, EventEmitter, ViewChild, HostListener, ElementRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChild, inject, computed, OnInit, OnChanges, SimpleChanges, ElementRef, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Menu, MenuModule } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
 import { TooltipModule } from 'primeng/tooltip';
+import { AuthService } from '../../../core/services/auth.service';
+import { UserRole } from '../../../core/models/auth.model';
 
 export interface SidebarOrg {
   name: string;
@@ -31,6 +33,19 @@ export interface SidebarUser {
   bgColorClass: string;
 }
 
+export interface SidebarAction {
+  label: string;
+  icon: string;
+  action: string;
+}
+
+export interface SidebarOrgConfig {
+  sectionLabel: string;
+  allOrgs: SidebarOrg[];
+  mainActions: SidebarAction[];
+  footerAction: SidebarAction;
+}
+
 @Component({
   selector: 'app-sidebar',
   standalone: true,
@@ -38,13 +53,24 @@ export interface SidebarUser {
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss'
 })
-export class SidebarComponent {
-  @Input() organizations: SidebarOrg[] = [];
-  @Input() sections: SidebarSection[] = [];
+export class SidebarComponent implements OnChanges {
+  private authService = inject(AuthService);
+
+  @Input() shopsList: SidebarOrgConfig | null = null;
+  @Input() menuOptions: SidebarSection[] = [];
   @Input() user: SidebarUser | null = null;
   @Input() collapsed = false;
 
-  @Output() toggleContext = new EventEmitter<void>();
+  @Output() actionClicked = new EventEmitter<string>();
+  @Output() orgSelected = new EventEmitter<SidebarOrg>();
+
+  activeOrg: SidebarOrg | null = null;
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['shopsList'] && this.shopsList && this.shopsList.allOrgs.length > 0) {
+      this.activeOrg = this.shopsList.allOrgs[0];
+    }
+  }
 
   @ViewChild('userMenu') userMenu!: Menu;
 
@@ -63,20 +89,16 @@ export class SidebarComponent {
   userMenuItems: MenuItem[] = [];
 
   ngOnInit() {
-    this.updateMenuItems();
-  }
-
-  updateMenuItems() {
     this.userMenuItems = [
       {
         label: 'Profile',
         icon: 'pi pi-user',
-        command: () => this.onProfile()
+        command: () => this.actionClicked.emit('Profile')
       },
       {
         label: 'Settings',
         icon: 'pi pi-cog',
-        command: () => console.log('Navigate to settings')
+        command: () => this.actionClicked.emit('Settings')
       },
       {
         separator: true
@@ -84,25 +106,14 @@ export class SidebarComponent {
       {
         label: 'Sign out',
         icon: 'pi pi-sign-out',
-        command: () => this.onLogout(),
+        command: () => this.actionClicked.emit('Logout'),
         styleClass: 'logout-item'
       }
     ];
-
-    // Add invite option if user has admin/owner role
-    if (this.organizations.length > 0 && this.canInvite(this.organizations[0].role)) {
-      this.userMenuItems.splice(1, 0, {
-        label: 'Invite',
-        icon: 'pi pi-user-plus',
-        command: () => this.onInvite()
-      });
-    }
   }
 
   showOrgSwitcher = false;
 
-  // Toggle internal collapsed state if no external control is preferred
-  // or simple binding. Here we assume internal control for demo.
   toggleCollapse() {
     this.collapsed = !this.collapsed;
     if (this.collapsed) {
@@ -121,27 +132,7 @@ export class SidebarComponent {
     event.stopPropagation();
     if (!this.collapsed) {
       this.userMenu.toggle(event);
-      this.showOrgSwitcher = false; // Close org switcher if user menu opens
+      this.showOrgSwitcher = false;
     }
-  }
-
-  onProfile() {
-    console.log('Navigate to profile');
-    // TODO: Implement navigation to profile
-  }
-
-  onInvite() {
-    console.log('Open invite modal');
-    // TODO: Implement invite functionality
-  }
-
-  onLogout() {
-    console.log('Logout user');
-    // TODO: Implement logout functionality
-  }
-
-  canInvite(role: string): boolean {
-    // Show invite option for Owner, Brand, or any admin role
-    return role === 'Owner' || role === 'Brand' || role.toLowerCase().includes('admin');
   }
 }

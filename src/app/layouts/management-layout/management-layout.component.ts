@@ -1,7 +1,10 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
-import { SidebarComponent, SidebarOrg, SidebarSection, SidebarUser } from '../../shared/components/sidebar/sidebar.component';
+import { SidebarComponent, SidebarOrg, SidebarSection, SidebarUser, SidebarOrgConfig } from '../../shared/components/sidebar/sidebar.component';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { SendInvitationComponent } from '../../shared/components/send-invitation/send-invitation.component';
+import { UserRole } from '../../core/models/auth.model';
 
 @Component({
     selector: 'app-management-layout',
@@ -12,9 +15,11 @@ import { SidebarComponent, SidebarOrg, SidebarSection, SidebarUser } from '../..
 })
 export class ManagementLayoutComponent implements OnInit {
     private router = inject(Router);
+    private dialogService = inject(DialogService);
+    private ref: DynamicDialogRef | undefined;
 
-    organizations: SidebarOrg[] = [];
-    sections: SidebarSection[] = [];
+    shopsList: SidebarOrgConfig | null = null;
+    menuOptions: SidebarSection[] = [];
     user: SidebarUser | null = null;
 
     ngOnInit() {
@@ -37,11 +42,22 @@ export class ManagementLayoutComponent implements OnInit {
     }
 
     private setSuperAdminConfig() {
-        this.organizations = [
+        const allOrgs = [
             { name: 'PCMBC', role: 'Owner', initial: 'P', bgColorClass: 'bg-purple-600' },
             { name: 'Basaglar', role: 'Brand', initial: 'B', bgColorClass: 'bg-teal-500' }
         ];
-        this.sections = [
+
+        this.shopsList = {
+            sectionLabel: 'YOUR ORGANIZATIONS',
+            allOrgs: allOrgs,
+            mainActions: [
+                { label: 'Manage Members', icon: 'pi pi-users', action: 'invite' },
+                { label: 'Organization Settings', icon: 'pi pi-cog', action: 'settings' }
+            ],
+            footerAction: { label: 'Create New Organization', icon: 'pi pi-plus', action: 'create' }
+        };
+
+        this.menuOptions = [
             {
                 title: 'Persona',
                 items: [
@@ -62,25 +78,6 @@ export class ManagementLayoutComponent implements OnInit {
                     { label: 'Sessions', icon: 'pi pi-hourglass', route: '/super-admin/sessions' },
                     { label: 'Start new review', icon: 'pi pi-plus', route: '/super-admin/start-review' }
                 ]
-            },
-            {
-                title: 'Deployments',
-                items: [
-                    { label: 'Manage Deployments', icon: 'pi pi-rocket', route: '/super-admin/deployments' },
-                    { label: 'Create Deployment', icon: 'pi pi-plus', route: '/super-admin/create-deployment' }
-                ]
-            },
-            {
-                title: 'Analytics',
-                items: [
-                    { label: 'Analytics', icon: 'pi pi-chart-bar', route: '/super-admin/analytics' }
-                ]
-            },
-            {
-                title: 'Billing',
-                items: [
-                    { label: 'Billing', icon: 'pi pi-wallet', route: '/super-admin/billing' }
-                ]
             }
         ];
         this.user = {
@@ -92,10 +89,27 @@ export class ManagementLayoutComponent implements OnInit {
     }
 
     private setShopAdminConfig() {
-        this.organizations = [
-            { name: 'Shop HQ', role: 'Admin', initial: 'H', bgColorClass: 'bg-orange-600' }
+        const allOrgs = [
+            { name: 'Shop HQ', role: 'Admin', initial: 'H', bgColorClass: 'bg-orange-600' },
+            { name: 'Branch East', role: 'Admin', initial: 'E', bgColorClass: 'bg-amber-600' },
+            { name: 'Branch West', role: 'Admin', initial: 'W', bgColorClass: 'bg-amber-600' },
+            { name: 'Branch North', role: 'Admin', initial: 'N', bgColorClass: 'bg-amber-600' },
+            { name: 'Branch South', role: 'Admin', initial: 'S', bgColorClass: 'bg-amber-600' },
+            { name: 'Branch South', role: 'Admin', initial: 'S', bgColorClass: 'bg-amber-600' },
+            { name: 'Branch South', role: 'Admin', initial: 'S', bgColorClass: 'bg-amber-600' },
         ];
-        this.sections = [
+
+        this.shopsList = {
+            sectionLabel: 'YOUR ORGANIZATIONS',
+            allOrgs: allOrgs,
+            mainActions: [
+                { label: 'Manage Sellers', icon: 'pi pi-users', action: 'invite' },
+                { label: 'Organization Settings', icon: 'pi pi-cog', action: 'settings' }
+            ],
+            footerAction: { label: 'Invite new seller', icon: 'pi pi-plus', action: 'invite_seller' }
+        };
+
+        this.menuOptions = [
             {
                 title: 'Management',
                 items: [
@@ -114,10 +128,21 @@ export class ManagementLayoutComponent implements OnInit {
     }
 
     private setSellerConfig() {
-        this.organizations = [
-            { name: 'My Seller Store', role: 'Seller', initial: 'S', bgColorClass: 'bg-blue-600' }
+        const allOrgs = [
+            { name: 'My Seller Store', role: 'Seller', initial: 'S', bgColorClass: 'bg-blue-600' },
+            { name: 'Second Store', role: 'Seller', initial: 'S', bgColorClass: 'bg-teal-600' }
         ];
-        this.sections = [
+
+        this.shopsList = {
+            sectionLabel: 'YOUR SHOPS',
+            allOrgs: allOrgs,
+            mainActions: [
+                { label: 'Shop Settings', icon: 'pi pi-cog', action: 'settings' }
+            ],
+            footerAction: { label: 'Create New Shop', icon: 'pi pi-plus', action: 'create' }
+        };
+
+        this.menuOptions = [
             {
                 title: 'Main',
                 items: [
@@ -133,5 +158,45 @@ export class ManagementLayoutComponent implements OnInit {
             initial: 'S',
             bgColorClass: 'bg-blue-500'
         };
+    }
+
+    onOrgSelected(org: SidebarOrg) {
+        console.log('Switched to organization:', org.name);
+        // Additional logic like fetching shop data could go here
+    }
+
+    onActionClicked(action: string) {
+        console.log('Action clicked:', action);
+        if (action === 'invite_seller') {
+            this.openInvitationPopup();
+        }
+    }
+
+    private openInvitationPopup() {
+        this.ref = this.dialogService.open(SendInvitationComponent, {
+            width: '600px',
+            contentStyle: { overflow: 'auto', padding: '0' },
+            baseZIndex: 10000,
+            showHeader: false,
+            styleClass: 'custom-modern-dialog',
+            data: {
+                role: UserRole.SELLER,
+                showShops: true,
+                showInviteCode: true,
+                inviteCode: 'INVITE_CODE',
+                availableShops: this.shopsList?.allOrgs.map(org => ({
+                    id: org.name,
+                    name: org.name,
+                    initial: org.initial,
+                    bgColorClass: org.bgColorClass
+                })) || []
+            }
+        });
+
+        this.ref.onClose.subscribe((result) => {
+            if (result) {
+                console.log('Invitation sent successfully');
+            }
+        });
     }
 }

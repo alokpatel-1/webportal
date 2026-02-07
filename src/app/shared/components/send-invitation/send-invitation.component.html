@@ -1,71 +1,118 @@
-<div class="invitation-container">
+<div class="invitation-container" [class.is-dialog]="!!ref">
+    <!-- Custom Dialog Header (when opened as dialog) -->
+    <div class="invitation-header" *ngIf="!!ref">
+        <div class="header-content">
+            <h3>Invite {{ roleLabel }}</h3>
+            <p>Expand your platform by inviting new members.</p>
+        </div>
+        <button class="close-btn" (click)="closeDialog()" aria-label="Close dialog">
+            <i class="pi pi-times"></i>
+        </button>
+    </div>
+
     @if (!isSubmitted()) {
-    <div class="invitation-card">
-        <div class="header">
+    <div class="invitation-card" [class.embedded]="!ref">
+        <div class="header" *ngIf="!ref">
             <h2>Invite {{ roleLabel }}</h2>
             <p>Send an invitation to join the Livo platform.</p>
         </div>
 
-        <form [formGroup]="invitationForm" (ngSubmit)="onSubmit()">
+        <form [formGroup]="invitationForm" (ngSubmit)="onSubmit()" class="modern-form">
             <!-- Email Field -->
-            <div class="form-field">
+            <div class="form-group">
                 <label for="email">Email Address</label>
-                <input id="email" type="email" formControlName="email" placeholder="Enter recipient's email" [class.invalid]="invitationForm.get('email')?.invalid && invitationForm.get('email')?.touched">
+                <div class="input-wrapper" [class.error]="invitationForm.get('email')?.invalid && invitationForm.get('email')?.touched">
+                    <i class="pi pi-envelope input-icon"></i>
+                    <input id="email" type="email" formControlName="email" placeholder="e.g. alex@livo.com" />
+                </div>
                 @if (invitationForm.get('email')?.invalid && invitationForm.get('email')?.touched) {
-                <small class="error-text">Please enter a valid email address.</small>
+                <small class="error-msg">Please enter a valid email address.</small>
                 }
             </div>
 
-            <!-- Invite Code (Conditional) -->
-            @if (showInviteCode()) {
-            <div class="form-field">
-                <label for="inviteCode">Invitation Code</label>
-                <input id="inviteCode" type="text" [value]="inviteCode()" disabled class="readonly-field">
-                <small class="info-text">This code will be automatically sent to the recipient.</small>
-            </div>
-            }
-
             <!-- Shops Selection (Conditional) -->
             @if (showShops()) {
-            <div class="form-field">
-                <label>Associate with Shops</label>
-                <div class="shops-selection">
-                    @for (shop of availableShops(); track shop.id) {
-                    <div class="shop-item">
-                        <label class="checkbox-container">
-                            <input type="checkbox" [value]="shop.id" (change)="$any($event.target).checked">
-                            <span class="checkmark"></span>
-                            {{ shop.name }}
-                        </label>
+            <div class="form-group">
+                <div class="field-header">
+                    <label>Select Shops</label>
+                    <div class="selection-helpers" *ngIf="availableShops().length > 3">
+                        <button type="button" (click)="selectAll()" class="helper-btn">Select All</button>
+                        <ng-container *ngIf="invitationForm.get('shops')?.value?.length > 0">
+                            <span class="text-divider">|</span>
+                            <button type="button" (click)="deselectAll()" class="helper-btn">Clear</button>
+                        </ng-container>
+                    </div>
+                </div>
+
+                <!-- Search box for large lists -->
+                <div class="search-wrapper" *ngIf="availableShops().length > 3">
+                    <i class="pi pi-search search-icon"></i>
+                    <input type="text" [ngModel]="searchTerm()" (ngModelChange)="searchTerm.set($event)" [ngModelOptions]="{standalone: true}" placeholder="Search shops..." />
+                </div>
+
+                <div class="shops-grid custom-scrollbar">
+                    @for (shop of filteredShops(); track shop.id) {
+                    <div class="shop-card" [class.selected]="isSelected(shop.id)" (click)="toggleShop(shop.id)">
+                        <div class="shop-card-content">
+                            <div class="shop-avatar" [ngClass]="shop.bgColorClass">
+                                {{ shop.initial }}
+                            </div>
+                            <span class="shop-name">{{ shop.name }}</span>
+                        </div>
+                        <div class="selection-indicator">
+                            <i class="pi pi-check" *ngIf="isSelected(shop.id)"></i>
+                        </div>
+                    </div>
+                    } @empty {
+                    <div class="empty-results">
+                        <i class="pi pi-search-minus mb-2"></i>
+                        <p>No shops match your search</p>
                     </div>
                     }
                 </div>
                 @if (invitationForm.get('shops')?.invalid && invitationForm.get('shops')?.touched) {
-                <small class="error-text">Please select at least one shop.</small>
+                <small class="error-msg">Select at least one shop.</small>
                 }
             </div>
             }
 
-            <div class="actions">
-                <button type="submit" [disabled]="isLoading()" class="btn-primary">
-                    @if (isLoading()) {
-                    <i class="pi pi-spin pi-spinner mr-2"></i>
-                    Sending...
-                    } @else {
-                    Send Invitation
-                    }
+            <!-- Invite Code (Conditional) -->
+            @if (showInviteCode()) {
+            <div class="form-group">
+                <label>Invitation Code</label>
+                <div class="code-badge">
+                    <code>{{ inviteCode() }}</code>
+                    <i class="pi pi-shield ml-2 text-green-500"></i>
+                </div>
+            </div>
+            }
+
+            <div class="card-actions">
+                <button type="submit" [disabled]="isLoading()" class="btn-send">
+                    <span *ngIf="!isLoading()">
+                        Send Invitation <i class="pi pi-arrow-right ml-2 text-sm"></i>
+                    </span>
+                    <span *ngIf="isLoading()">
+                        <i class="pi pi-spin pi-spinner mr-2"></i> Sending...
+                    </span>
                 </button>
             </div>
         </form>
     </div>
     } @else {
-    <div class="success-card">
-        <div class="success-icon">
-            <i class="pi pi-check-circle"></i>
+    <div class="success-view">
+        <div class="success-animation">
+            <div class="check-container">
+                <i class="pi pi-check"></i>
+            </div>
+            <div class="confetti-particles"></div>
         </div>
         <h2>Invitation Sent!</h2>
-        <p>We've sent an invitation email to <strong>{{ invitationForm.get('email')?.value }}</strong>.</p>
-        <button (click)="resetForm()" class="btn-secondary">Send Another</button>
+        <p>A personalized invitation email is on its way to <br><strong>{{ invitationForm.get('email')?.value }}</strong></p>
+
+        <div class="success-actions" *ngIf="!ref">
+            <button (click)="resetForm()" class="btn-outline">Invite Another</button>
+        </div>
     </div>
     }
 </div>
