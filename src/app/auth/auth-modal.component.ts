@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { SignupFormComponent } from './signup-form/signup-form.component';
 import { ForgotPasswordFormComponent } from './forgot-password-form/forgot-password-form.component';
-import { AuthService } from '../../../core/services/auth.service';
-import { AuthMode, RegisterPayload, LoginPayload, AuthCode } from '../../../core/models/auth.model';
+import { AuthService } from '../core/services/auth.service';
+import { AuthMode, RegisterPayload, LoginPayload, AuthCode } from '../core/models/auth.model';
 import { finalize } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 

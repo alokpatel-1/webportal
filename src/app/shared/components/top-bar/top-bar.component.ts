@@ -1,7 +1,7 @@
 import { Component, HostListener, ElementRef, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { AuthModalComponent } from '../auth-modal/auth-modal.component';
+import { AuthModalComponent } from '../../../auth/auth-modal.component';
 import { AuthMode } from '../../../core/models/auth.model';
 import { AuthService } from '../../../core/services/auth.service';
 

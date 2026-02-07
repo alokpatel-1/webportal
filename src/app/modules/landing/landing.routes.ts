@@ -7,5 +7,9 @@ export const landingRoutes: Routes = [
     {
         path: 'products',
         component: ProductListComponent
+    },
+    {
+        path: 'shope-admin-onboard',
+        loadComponent: () => import('../../auth/shope-admin-onboard/shope-admin-onboard.component').then(m => m.ShopeAdminOnboardComponent)
     }
 ];
