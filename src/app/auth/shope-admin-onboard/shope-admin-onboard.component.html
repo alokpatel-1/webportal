@@ -1,24 +1,112 @@
 <div class="onboard-container">
     <div class="onboard-card">
-        <div class="onboard-header">
-            <h1 class="onboard-title">Register as Shop Admin</h1>
-            <p class="onboard-subtitle">Empower your shop with Livo's management tools.</p>
+        <div class="onboard-logo">
+            <div class="logo">
+                <span class="logo__brand">
+                    <span class="gradient-text">Livo</span>
+                </span>
+            </div>
         </div>
 
-        <form class="onboard-form">
-            <!-- Onboarding form fields will go here -->
-            <div class="form-group">
-                <label for="shopName">Shop Name</label>
-                <input type="text" id="shopName" class="form-control" placeholder="Enter your shop name">
-            </div>
+        <div class="onboard-header">
+            <h1 class="onboard-title">Register as {{ roleLabel }}</h1>
+            <p class="onboard-subtitle">{{ roleSubtitle }}</p>
+        </div>
 
-            <div class="form-actions">
-                <button type="submit" class="btn btn-primary">Start Onboarding</button>
-            </div>
-        </form>
+        <!-- Step 1: Email Request -->
+        <ng-container *ngIf="currentStep() === OnboardingStep.EmailRequest">
+            <form [formGroup]="emailForm" (ngSubmit)="onRequestEmail()" class="onboard-form">
+                <div class="form-group">
+                    <label for="email">Business Email</label>
+                    <input type="email" id="email" formControlName="email" class="form-control" placeholder="Enter your business email" [class.is-invalid]="emailForm.get('email')?.invalid && emailForm.get('email')?.touched">
+                    <div class="error-msg" *ngIf="emailForm.get('email')?.invalid && emailForm.get('email')?.touched">
+                        Please enter a valid email address.
+                    </div>
+                </div>
 
-        <div class="onboard-footer">
-            <p>Already have an account? <a routerLink="/">Go back to home</a></p>
+                <div *ngIf="errorMessage()" class="alert alert-error">
+                    {{ errorMessage() }}
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary" [disabled]="isLoading()">
+                        <span *ngIf="!isLoading()">Start Onboarding</span>
+                        <i *ngIf="isLoading()" class="pi pi-spin pi-spinner"></i>
+                    </button>
+                </div>
+            </form>
+        </ng-container>
+
+        <!-- Step 2: Verification Pending -->
+        <ng-container *ngIf="currentStep() === OnboardingStep.Pending">
+            <div class="status-view">
+                <div class="status-icon success">
+                    <i class="pi pi-envelope"></i>
+                </div>
+                <h3>Check your email</h3>
+                <p>We've sent a verification link to <strong>{{ emailForm.get('email')?.value }}</strong>. Please click
+                    the link to continue your registration.</p>
+            </div>
+        </ng-container>
+
+        <!-- Step 3: Password Setup -->
+        <ng-container *ngIf="currentStep() === OnboardingStep.PasswordSetup">
+            <form [formGroup]="passwordForm" (ngSubmit)="onCompleteOnboarding()" class="onboard-form">
+                <div class="form-group">
+                    <label for="prep-email">Email Address</label>
+                    <input type="email" id="prep-email" formControlName="email" class="form-control disabled" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Create Password</label>
+                    <div class="input-wrapper">
+                        <input [type]="showPassword() ? 'text' : 'password'" id="password" formControlName="password" class="form-control" placeholder="Minimum 6 characters">
+                        <button type="button" class="password-toggle" (click)="showPassword.set(!showPassword())">
+                            <i class="pi" [class.pi-eye]="!showPassword()" [class.pi-eye-slash]="showPassword()"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <div class="input-wrapper">
+                        <input [type]="showConfirmPassword() ? 'text' : 'password'" id="confirmPassword" formControlName="confirmPassword" class="form-control" placeholder="Repeat your password">
+                        <button type="button" class="password-toggle" (click)="showConfirmPassword.set(!showConfirmPassword())">
+                            <i class="pi" [class.pi-eye]="!showConfirmPassword()" [class.pi-eye-slash]="showConfirmPassword()"></i>
+                        </button>
+                    </div>
+                    <div class="error-msg" *ngIf="passwordForm.hasError('mismatch') && passwordForm.get('confirmPassword')?.touched">
+                        Passwords do not match.
+                    </div>
+                </div>
+
+                <div *ngIf="errorMessage()" class="alert alert-error">
+                    {{ errorMessage() }}
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary" [disabled]="isLoading()">
+                        <span *ngIf="!isLoading()">Complete Registration</span>
+                        <i *ngIf="isLoading()" class="pi pi-spin pi-spinner"></i>
+                    </button>
+                </div>
+            </form>
+        </ng-container>
+
+        <!-- Step 4: Success -->
+        <ng-container *ngIf="currentStep() === OnboardingStep.Success">
+            <div class="status-view">
+                <div class="status-icon success">
+                    <i class="pi pi-check-circle"></i>
+                </div>
+                <h3>Registration Complete!</h3>
+                <p>Your {{ userRole() === UserRole.SELLER ? 'seller' : 'shop admin' }} account has been created successfully. Redirecting you to login...</p>
+            </div>
+        </ng-container>
+
+        <div class="onboard-footer" *ngIf="currentStep() === OnboardingStep.EmailRequest">
+            <p>Already have an account? <a (click)="router.navigate(['/'])" style="cursor: pointer;">Go back to home</a>
+            </p>
         </div>
     </div>
 </div>

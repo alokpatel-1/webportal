@@ -18,7 +18,7 @@ export const routes: Routes = [
   },
   {
     path: 'shop-admin',
-    loadChildren: () => import('./modules/shop-admin/shop-admin.routes').then(m => m.shopAdminRoutes)
+    loadChildren: () => import('./modules/shops-admin/shop-admin.routes').then(m => m.shopAdminRoutes)
   },
   {
     path: 'seller',

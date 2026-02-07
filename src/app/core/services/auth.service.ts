@@ -28,10 +28,25 @@ export class AuthService {
                 }
             })
         );
-    }
+    };
 
     resendVerification(email: string): Observable<any> {
         return this.http.post(`${this.apiUrl}/auth/resend-verification`, { email }, { withCredentials: true });
+    }
+
+    requestOnboardingEmail(email: string): Observable<any> {
+        return this.http.post(`${this.apiUrl}/auth/onboarding/request`, { email }, { withCredentials: true });
+    }
+
+    completeOnboarding(payload: any): Observable<AuthResponse> {
+        return this.http.post<AuthResponse>(`${this.apiUrl}/auth/onboarding/complete`, payload, { withCredentials: true });
+    }
+
+    checkTokenValidity(token: string): Observable<any> {
+        return this.http.get(`${this.apiUrl}/auth/onboarding/check-token`, {
+            params: { token },
+            withCredentials: true
+        });
     }
 
     logout() {

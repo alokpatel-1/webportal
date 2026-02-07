@@ -38,6 +38,11 @@ export enum AuthMode {
     ForgotPassword = 'forgot-password'
 }
 
+export enum UserRole {
+    SELLER = 'seller',
+    SHOP_ADMIN = 'shop-admin'
+}
+
 export interface Role {
     id: string;
     name: string;
