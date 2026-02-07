@@ -127,12 +127,6 @@ export class SendInvitationComponent implements OnInit {
                 inviteCode: this.inviteCode()
             });
 
-            // If in dialog, close after a short delay
-            if (this.ref) {
-                setTimeout(() => {
-                    this.ref?.close(true);
-                }, 2000);
-            }
         }, 1500);
     }
 

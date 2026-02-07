@@ -347,40 +347,40 @@
 }
 
 // Buttons
+.btn-send {
+    width: 100%;
+    padding: 1.125rem;
+    border: none;
+    border-radius: 14px;
+    background: var(--primary-gradient);
+    color: white;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(255, 63, 108, 0.25);
+
+    &:hover:not(:disabled) {
+        transform: scale(1.02);
+        box-shadow: 0 6px 20px rgba(255, 63, 108, 0.35);
+    }
+
+    &:active {
+        transform: scale(0.98);
+    }
+
+    &:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+        filter: grayscale(0.5);
+    }
+}
+
 .card-actions {
     margin-top: 2.5rem;
-
-    .btn-send {
-        width: 100%;
-        padding: 1.125rem;
-        border: none;
-        border-radius: 14px;
-        background: var(--primary-gradient);
-        color: white;
-        font-weight: 700;
-        font-size: 1rem;
-        cursor: pointer;
-        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 4px 15px rgba(255, 63, 108, 0.25);
-
-        &:hover:not(:disabled) {
-            transform: scale(1.02);
-            box-shadow: 0 6px 20px rgba(255, 63, 108, 0.35);
-        }
-
-        &:active {
-            transform: scale(0.98);
-        }
-
-        &:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-            filter: grayscale(0.5);
-        }
-    }
 }
 
 // Success View

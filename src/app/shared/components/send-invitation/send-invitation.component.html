@@ -110,8 +110,9 @@
         <h2>Invitation Sent!</h2>
         <p>A personalized invitation email is on its way to <br><strong>{{ invitationForm.get('email')?.value }}</strong></p>
 
-        <div class="success-actions" *ngIf="!ref">
-            <button (click)="resetForm()" class="btn-outline">Invite Another</button>
+        <div class="success-actions">
+            <button *ngIf="!!ref" (click)="closeDialog()" class="btn-send">Okay, Got it</button>
+            <button *ngIf="!ref" (click)="resetForm()" class="btn-outline">Invite Another</button>
         </div>
     </div>
     }
