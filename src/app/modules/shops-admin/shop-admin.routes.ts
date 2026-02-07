@@ -7,7 +7,11 @@ export const shopAdminRoutes: Routes = [
     path: '',
     component: ManagementLayoutComponent,
     children: [
-      { path: '', component: ShopAdminDashboardComponent }
+      { path: '', component: ShopAdminDashboardComponent },
+      {
+        path: 'seller-invite',
+        loadComponent: () => import('./components/seller-invite-page.component').then(m => m.SellerInvitePageComponent)
+      }
     ]
   }
 ];

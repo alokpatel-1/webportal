@@ -1,0 +1,71 @@
+<div class="invitation-container">
+    @if (!isSubmitted()) {
+    <div class="invitation-card">
+        <div class="header">
+            <h2>Invite {{ roleLabel }}</h2>
+            <p>Send an invitation to join the Livo platform.</p>
+        </div>
+
+        <form [formGroup]="invitationForm" (ngSubmit)="onSubmit()">
+            <!-- Email Field -->
+            <div class="form-field">
+                <label for="email">Email Address</label>
+                <input id="email" type="email" formControlName="email" placeholder="Enter recipient's email" [class.invalid]="invitationForm.get('email')?.invalid && invitationForm.get('email')?.touched">
+                @if (invitationForm.get('email')?.invalid && invitationForm.get('email')?.touched) {
+                <small class="error-text">Please enter a valid email address.</small>
+                }
+            </div>
+
+            <!-- Invite Code (Conditional) -->
+            @if (showInviteCode()) {
+            <div class="form-field">
+                <label for="inviteCode">Invitation Code</label>
+                <input id="inviteCode" type="text" [value]="inviteCode()" disabled class="readonly-field">
+                <small class="info-text">This code will be automatically sent to the recipient.</small>
+            </div>
+            }
+
+            <!-- Shops Selection (Conditional) -->
+            @if (showShops()) {
+            <div class="form-field">
+                <label>Associate with Shops</label>
+                <div class="shops-selection">
+                    @for (shop of availableShops(); track shop.id) {
+                    <div class="shop-item">
+                        <label class="checkbox-container">
+                            <input type="checkbox" [value]="shop.id" (change)="$any($event.target).checked">
+                            <span class="checkmark"></span>
+                            {{ shop.name }}
+                        </label>
+                    </div>
+                    }
+                </div>
+                @if (invitationForm.get('shops')?.invalid && invitationForm.get('shops')?.touched) {
+                <small class="error-text">Please select at least one shop.</small>
+                }
+            </div>
+            }
+
+            <div class="actions">
+                <button type="submit" [disabled]="isLoading()" class="btn-primary">
+                    @if (isLoading()) {
+                    <i class="pi pi-spin pi-spinner mr-2"></i>
+                    Sending...
+                    } @else {
+                    Send Invitation
+                    }
+                </button>
+            </div>
+        </form>
+    </div>
+    } @else {
+    <div class="success-card">
+        <div class="success-icon">
+            <i class="pi pi-check-circle"></i>
+        </div>
+        <h2>Invitation Sent!</h2>
+        <p>We've sent an invitation email to <strong>{{ invitationForm.get('email')?.value }}</strong>.</p>
+        <button (click)="resetForm()" class="btn-secondary">Send Another</button>
+    </div>
+    }
+</div>
