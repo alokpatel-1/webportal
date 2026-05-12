@@ -75,10 +75,8 @@ export class AuthModalComponent {
                     this.successMessage.set(res.message);
                     console.log('Login successful:', res);
 
-                    const redirectUrl = this.authService.getRedirectUrlByRole(res.data?.user?.role || []);
                     setTimeout(() => {
                         this.close();
-                        this.router.navigate([redirectUrl]);
                     }, 1500);
                 },
                 error: (err) => {

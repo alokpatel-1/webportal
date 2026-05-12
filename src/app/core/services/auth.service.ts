@@ -16,11 +16,11 @@ export class AuthService {
     currentUser = signal<AuthUser | null>(this.getStoredUser());
 
     register(payload: RegisterPayload): Observable<AuthResponse> {
-        return this.http.post<AuthResponse>(`${this.apiUrl}/auth/register`, payload, { withCredentials: true });
+        return this.http.post<AuthResponse>(`${this.apiUrl}/auth/register`, payload);
     }
 
     login(payload: LoginPayload): Observable<AuthResponse> {
-        return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, payload, { withCredentials: true }).pipe(
+        return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, payload).pipe(
             tap(res => {
                 if (res.success && res.data?.user) {
                     this.storeUser(res.data.user);
@@ -31,40 +31,52 @@ export class AuthService {
     };
 
     resendVerification(email: string): Observable<any> {
-        return this.http.post(`${this.apiUrl}/auth/resend-verification`, { email }, { withCredentials: true });
+        return this.http.post(`${this.apiUrl}/auth/resend-verification`, { email });
     }
 
     requestOnboardingEmail(email: string): Observable<any> {
-        return this.http.post(`${this.apiUrl}/auth/onboarding/request`, { email }, { withCredentials: true });
+        return this.http.post(`${this.apiUrl}/invite/self`, { email });
     }
 
     completeOnboarding(payload: any): Observable<AuthResponse> {
-        return this.http.post<AuthResponse>(`${this.apiUrl}/auth/onboarding/complete`, payload, { withCredentials: true });
+        return this.http.post<AuthResponse>(`${this.apiUrl}/auth/onboarding/complete`, payload);
     }
 
     checkTokenValidity(token: string): Observable<any> {
         return this.http.get(`${this.apiUrl}/auth/onboarding/check-token`, {
-            params: { token },
-            withCredentials: true
+            params: { token }
         });
     }
 
     validateInviteToken(token: string): Observable<any> {
         return this.http.get(`${this.apiUrl}/invite/validate`, {
-            params: { token },
-            withCredentials: true
+            params: { token }
         });
     }
 
     acceptInvite(payload: { token: string; password: string; name: string }): Observable<any> {
-        return this.http.post(`${this.apiUrl}/invite/accept`, payload, { withCredentials: true });
+        return this.http.post(`${this.apiUrl}/invite/accept`, payload);
     }
 
     verifyEmail(token: string): Observable<any> {
         return this.http.get(`${this.apiUrl}/auth/verify-email`, {
-            params: { token },
-            withCredentials: true
+            params: { token }
         });
+    }
+
+    verifyAuthToken(token?: string | null): Observable<AuthResponse> {
+        let params = {};
+        if (token) {
+            params = { token };
+        }
+        return this.http.get<AuthResponse>(`${this.apiUrl}/auth/verify-token`, { params }).pipe(
+            tap(res => {
+                if (res.success && res.data?.user) {
+                    this.storeUser(res.data.user);
+                    this.currentUser.set(res.data.user);
+                }
+            })
+        );
     }
 
     logout() {

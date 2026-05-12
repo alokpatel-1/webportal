@@ -35,6 +35,12 @@ export class AcceptInviteComponent implements OnInit {
 
     token: string | null = null;
     email: string | null = null;
+    roleName = signal<string | null>(null);
+
+    get isExpired(): boolean {
+        const msg = this.errorMessage()?.toLowerCase() || '';
+        return msg.includes('expire');
+    }
 
     constructor() {
         this.passwordForm = this.fb.group({
@@ -70,6 +76,18 @@ export class AcceptInviteComponent implements OnInit {
                 if (this.email) {
                     this.passwordForm.patchValue({ email: this.email });
                 }
+                
+                // Capture the role name to display it on the UI
+                if (res?.roleName) {
+                    // Format from UPPER_CASE to Title Case if needed, or use as is
+                    const formattedRole = res.roleName.replace(/_/g, ' ').replace(/\w\S*/g, (txt: string) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+                    this.roleName.set(formattedRole);
+                } else if (res?.type === 'self') {
+                    this.roleName.set('Shop Admin');
+                } else if (res?.type === 'shop_invite') {
+                    this.roleName.set('Seller');
+                }
+
                 this.currentStep.set(InviteStep.PasswordSetup);
             },
             error: (err) => {

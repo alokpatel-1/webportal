@@ -109,57 +109,56 @@ export class ShopeAdminOnboardComponent implements OnInit {
         if (this.emailForm.invalid) {
             this.emailForm.markAllAsTouched();
             return;
-        };
+        }
 
-        this.currentStep.set(OnboardingStep.Pending);
-        // this.isLoading.set(true);
-        // this.errorMessage.set(null);
+        this.isLoading.set(true);
+        this.errorMessage.set(null);
 
-        // this.authService.requestOnboardingEmail(this.emailForm.value.email).subscribe({
-        //     next: () => {
-        //         this.isLoading.set(false);
-        //         this.currentStep.set(OnboardingStep.Pending);
-        //     },
-        //     error: (err) => {
-        //         this.isLoading.set(false);
-        //         this.errorMessage.set(err.error?.message || 'Failed to send onboarding email.');
-        //     }
-        // });
+        this.authService.requestOnboardingEmail(this.emailForm.value.email).subscribe({
+            next: () => {
+                this.isLoading.set(false);
+                this.currentStep.set(OnboardingStep.Pending);
+            },
+            error: (err) => {
+                this.isLoading.set(false);
+                this.errorMessage.set(err.error?.message || 'Failed to send onboarding email.');
+            }
+        });
     }
 
     onCompleteOnboarding() {
         if (this.passwordForm.invalid) {
             this.passwordForm.markAllAsTouched();
             return;
+        }
+
+        if (!this.token) {
+            this.errorMessage.set('Missing invitation token.');
+            return;
+        }
+
+        this.isLoading.set(true);
+        this.errorMessage.set(null);
+
+        const payload = {
+            token: this.token,
+            password: this.passwordForm.get('password')?.value,
+            name: '' // optional
         };
 
-        this.currentStep.set(OnboardingStep.Success);
-        setTimeout(() => {
-            this.router.navigate(['/']);
-        }, 3000);
-
-        // this.isLoading.set(true);
-        // this.errorMessage.set(null);
-
-        // const payload = {
-        //     token: this.token,
-        //     email: this.prepopulatedEmail,
-        //     password: this.passwordForm.get('password')?.value
-        // };
-
-        // this.authService.completeOnboarding(payload).subscribe({
-        //     next: () => {
-        //         this.isLoading.set(false);
-        //         this.currentStep.set(OnboardingStep.Success);
-        //         setTimeout(() => {
-        //             this.router.navigate(['/']);
-        //         }, 3000);
-        //     },
-        //     error: (err) => {
-        //         this.isLoading.set(false);
-        //         this.errorMessage.set(err.error?.message || 'Failed to complete registration.');
-        //     }
-        // });
+        this.authService.acceptInvite(payload).subscribe({
+            next: () => {
+                this.isLoading.set(false);
+                this.currentStep.set(OnboardingStep.Success);
+                setTimeout(() => {
+                    this.router.navigate(['/']);
+                }, 3000);
+            },
+            error: (err) => {
+                this.isLoading.set(false);
+                this.errorMessage.set(err.error?.message || 'Failed to complete registration.');
+            }
+        });
     }
 }
 

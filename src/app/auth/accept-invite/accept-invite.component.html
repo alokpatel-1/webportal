@@ -26,16 +26,23 @@
                 <div class="error-icon-circle">
                     <div class="error-icon-inner">
                         <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 9v4m0 4h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 9v4m0 4h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                     </div>
                 </div>
-                <h3 class="error-title">Invitation Invalid</h3>
+                <h3 class="error-title">
+                    {{ isExpired ? 'Invitation Expired' : 'Invitation Invalid' }}
+                </h3>
                 <div class="error-message-badge">
                     <i class="pi pi-exclamation-circle"></i>
                     <span>{{ errorMessage() }}</span>
                 </div>
-                <p class="error-hint">The invitation may have expired or already been used.<br>Please request a new one from your team admin.</p>
+                <p class="error-hint" *ngIf="isExpired">
+                    This invitation link is no longer valid because it has expired.
+                </p>
+                <p class="error-hint" *ngIf="!isExpired">
+                    The invitation may be invalid or has already been used.
+                </p>
                 <button class="btn-go-home" (click)="router.navigate(['/'])">
                     <i class="pi pi-home"></i>
                     Back to Home
@@ -48,7 +55,8 @@
             <div class="invite-header">
                 <div class="invite-badge">
                     <i class="pi pi-envelope"></i>
-                    <span>You've been invited!</span>
+                    <span *ngIf="roleName()">You've been invited as a <strong>{{ roleName() }}</strong>!</span>
+                    <span *ngIf="!roleName()">You've been invited!</span>
                 </div>
                 <h1 class="invite-title">Accept Invitation</h1>
                 <p class="invite-subtitle">Complete your account setup to join the team.</p>
@@ -59,12 +67,9 @@
                     <label for="invite-name">Full Name</label>
                     <div class="input-wrapper">
                         <i class="pi pi-user input-icon"></i>
-                        <input type="text" id="invite-name" formControlName="name" class="form-control with-icon"
-                            placeholder="Enter your full name" autocomplete="off"
-                            [class.is-invalid]="passwordForm.get('name')?.invalid && passwordForm.get('name')?.touched">
+                        <input type="text" id="invite-name" formControlName="name" class="form-control with-icon" placeholder="Enter your full name" autocomplete="off" [class.is-invalid]="passwordForm.get('name')?.invalid && passwordForm.get('name')?.touched">
                     </div>
-                    <div class="error-msg"
-                        *ngIf="passwordForm.get('name')?.invalid && passwordForm.get('name')?.touched">
+                    <div class="error-msg" *ngIf="passwordForm.get('name')?.invalid && passwordForm.get('name')?.touched">
                         Please enter your full name.
                     </div>
                 </div>
@@ -73,8 +78,7 @@
                     <label for="invite-email">Email Address</label>
                     <div class="input-wrapper">
                         <i class="pi pi-envelope input-icon"></i>
-                        <input type="email" id="invite-email" formControlName="email"
-                            class="form-control with-icon disabled" readonly autocomplete="off">
+                        <input type="email" id="invite-email" formControlName="email" class="form-control with-icon disabled" readonly autocomplete="off">
                     </div>
                 </div>
 
@@ -82,9 +86,7 @@
                     <label for="invite-password">Create Password</label>
                     <div class="input-wrapper">
                         <i class="pi pi-lock input-icon"></i>
-                        <input [type]="showPassword() ? 'text' : 'password'" id="invite-password"
-                            formControlName="password" class="form-control with-icon"
-                            placeholder="Minimum 6 characters" autocomplete="new-password">
+                        <input [type]="showPassword() ? 'text' : 'password'" id="invite-password" formControlName="password" class="form-control with-icon" placeholder="Minimum 6 characters" autocomplete="new-password">
                         <button type="button" class="password-toggle" (click)="showPassword.set(!showPassword())">
                             <i class="pi" [class.pi-eye]="!showPassword()" [class.pi-eye-slash]="showPassword()"></i>
                         </button>
@@ -95,17 +97,12 @@
                     <label for="invite-confirm-password">Confirm Password</label>
                     <div class="input-wrapper">
                         <i class="pi pi-lock input-icon"></i>
-                        <input [type]="showConfirmPassword() ? 'text' : 'password'" id="invite-confirm-password"
-                            formControlName="confirmPassword" class="form-control with-icon"
-                            placeholder="Repeat your password" autocomplete="new-password">
-                        <button type="button" class="password-toggle"
-                            (click)="showConfirmPassword.set(!showConfirmPassword())">
-                            <i class="pi" [class.pi-eye]="!showConfirmPassword()"
-                                [class.pi-eye-slash]="showConfirmPassword()"></i>
+                        <input [type]="showConfirmPassword() ? 'text' : 'password'" id="invite-confirm-password" formControlName="confirmPassword" class="form-control with-icon" placeholder="Repeat your password" autocomplete="new-password">
+                        <button type="button" class="password-toggle" (click)="showConfirmPassword.set(!showConfirmPassword())">
+                            <i class="pi" [class.pi-eye]="!showConfirmPassword()" [class.pi-eye-slash]="showConfirmPassword()"></i>
                         </button>
                     </div>
-                    <div class="error-msg"
-                        *ngIf="passwordForm.hasError('mismatch') && passwordForm.get('confirmPassword')?.touched">
+                    <div class="error-msg" *ngIf="passwordForm.hasError('mismatch') && passwordForm.get('confirmPassword')?.touched">
                         Passwords do not match.
                     </div>
                 </div>
