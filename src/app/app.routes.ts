@@ -17,7 +17,7 @@ export const routes: Routes = [
     loadChildren: () => import('./modules/super-admin/super-admin.routes').then(m => m.superAdminRoutes)
   },
   {
-    path: 'shop-admin',
+    path: 'admin',
     loadChildren: () => import('./modules/shops-admin/shop-admin.routes').then(m => m.shopAdminRoutes)
   },
   {

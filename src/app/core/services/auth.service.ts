@@ -2,7 +2,7 @@ import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 
-import { RegisterPayload, LoginPayload, AuthUser, AuthResponse } from '../models/auth.model';
+import { RegisterPayload, LoginPayload, AuthUser, AuthResponse, UserRole } from '../models/auth.model';
 
 import { environment } from '../../../environments/environment';
 
@@ -49,10 +49,41 @@ export class AuthService {
         });
     }
 
+    validateInviteToken(token: string): Observable<any> {
+        return this.http.get(`${this.apiUrl}/invite/validate`, {
+            params: { token },
+            withCredentials: true
+        });
+    }
+
+    acceptInvite(payload: { token: string; password: string; name: string }): Observable<any> {
+        return this.http.post(`${this.apiUrl}/invite/accept`, payload, { withCredentials: true });
+    }
+
+    verifyEmail(token: string): Observable<any> {
+        return this.http.get(`${this.apiUrl}/auth/verify-email`, {
+            params: { token },
+            withCredentials: true
+        });
+    }
+
     logout() {
         localStorage.removeItem('user');
         this.currentUser.set(null);
         // Cookies are usually cleared by the backend or manually if needed
+    }
+
+    getRedirectUrlByRole(roles: string[]): string {
+        if (roles.includes(UserRole.SUPER_ADMIN)) {
+            return '/super-admin';
+        } else if (roles.includes(UserRole.ADMIN)) {
+            return '/admin';
+        } else if (roles.includes(UserRole.SELLER)) {
+            return '/seller';
+        } else if (roles.includes(UserRole.USER)) {
+            return '/';
+        }
+        return '/';
     }
 
     private storeUser(user: AuthUser) {

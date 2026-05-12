@@ -28,7 +28,7 @@ export class ShopeAdminOnboardComponent implements OnInit {
     protected OnboardingStep = OnboardingStep;
     protected UserRole = UserRole;
     currentStep = signal<OnboardingStep>(OnboardingStep.EmailRequest);
-    userRole = signal<UserRole>(UserRole.SHOP_ADMIN);
+    userRole = signal<UserRole>(UserRole.ADMIN);
 
     emailForm: FormGroup;
     passwordForm: FormGroup;

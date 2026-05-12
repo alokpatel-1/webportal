@@ -39,8 +39,10 @@ export enum AuthMode {
 }
 
 export enum UserRole {
-    SELLER = 'seller',
-    SHOP_ADMIN = 'shop-admin'
+    SUPER_ADMIN = 'SUPER_ADMIN',
+    ADMIN = 'ADMIN',
+    SELLER = 'SELLER',
+    USER = 'USER'
 }
 
 export interface Role {
@@ -53,7 +55,7 @@ export interface AuthUser {
     name: string;
     email: string;
     emailVerified: boolean;
-    role: Role[];
+    role: string[];
     permissions: string[];
 }
 

@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output, signal, inject, DestroyRef, model } from '@angular/core';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { SignupFormComponent } from './signup-form/signup-form.component';
@@ -21,6 +22,7 @@ export class AuthModalComponent {
 
     private authService = inject(AuthService);
     private destroyRef = inject(DestroyRef);
+    private router = inject(Router);
 
     // Expose enum to template
     readonly AuthMode = AuthMode;
@@ -73,7 +75,11 @@ export class AuthModalComponent {
                     this.successMessage.set(res.message);
                     console.log('Login successful:', res);
 
-                    setTimeout(() => this.close(), 1500);
+                    const redirectUrl = this.authService.getRedirectUrlByRole(res.data?.user?.role || []);
+                    setTimeout(() => {
+                        this.close();
+                        this.router.navigate([redirectUrl]);
+                    }, 1500);
                 },
                 error: (err) => {
                     this.errorMessage.set(err.error?.message || 'Login failed. Please check your credentials.');

@@ -12,11 +12,15 @@ export const landingRoutes: Routes = [
     {
         path: 'onboard-admin',
         loadComponent: () => import('../../auth/shope-admin-onboard/shope-admin-onboard.component').then(m => m.ShopeAdminOnboardComponent),
-        data: { role: UserRole.SHOP_ADMIN }
+        data: { role: UserRole.ADMIN }
     },
     {
         path: 'onboard-seller',
         loadComponent: () => import('../../auth/shope-admin-onboard/shope-admin-onboard.component').then(m => m.ShopeAdminOnboardComponent),
         data: { role: UserRole.SELLER }
+    },
+    {
+        path: 'accept-invite',
+        loadComponent: () => import('../../auth/accept-invite/accept-invite.component').then(m => m.AcceptInviteComponent)
     }
 ];
